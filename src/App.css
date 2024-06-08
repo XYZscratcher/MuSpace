@@ -1,0 +1,35 @@
+body,
+:root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 80px 1fr;
+}
+
+.column {
+  background-color: antiquewhite;
+}
+
+.body {
+  background-color: lightblue;
+  display: grid;
+  height: 100vh;
+  grid-template-rows: 50px 1fr 80px;
+}
+
+.content {
+  background-color: cadetblue;
+  overflow-y: scroll;
+}
+
+.header {
+  background-color: azure;
+}
+
+.footer {
+  background-color: aliceblue;
+}
