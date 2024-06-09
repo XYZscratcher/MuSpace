@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { readDir, BaseDirectory } from "@tauri-apps/api/fs"
-import { invoke } from "@tauri-apps/api";
+import { invoke, convertFileSrc } from "@tauri-apps/api/tauri";
 //import { parseStream } from "music-metadata"
 //import {createReadStream}from"node:fs"
 import "./App.css"
 const PATH = "C:\\Users\\Admin\\Music";//暂时写死
 const a = await readDir(PATH);
-invoke("start_static_server", { path: PATH });
+//invoke("start_static_server", { path: PATH });
+
+const isMusic = (name) => {
+  return ["mp3", "m4a", "flac", "wav", "ogg"].includes(name.split(".")[1])
+}
+
 function App() {
-  const [nowPlay,setNowPlay]=useState("")
+  const [nowPlay, setNowPlay] = useState("")
   return (
     <div className="container">
       <div className="column"></div>
@@ -16,11 +21,11 @@ function App() {
         <div className="header"></div>
         <div className="content">
           {a.map((item) => {
-            return <p onClick={() => setNowPlay(item.name)}>{item.name}</p>
+            if (isMusic(item.name)) return <p onClick={() => setNowPlay(item.name)}>{item.name.split(".")[0]}</p>
           })
           }
         </div>
-        <div className="footer"><audio src={nowPlay?"http://127.0.0.1:3000/music/"+nowPlay:""} controls></audio></div>
+        <div className="footer"><audio src={nowPlay ? convertFileSrc(PATH + "/" + nowPlay) : ""} controls></audio></div>
       </div>
     </div>
   );
