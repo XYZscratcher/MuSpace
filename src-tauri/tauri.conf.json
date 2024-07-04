@@ -7,11 +7,11 @@
   },
   "package": {
     "productName": "music-player-new",
-    "version": "0.0.0"
+    "version": "0.1.0"
   },
   "tauri": {
     "allowlist": {
-      "all": false,
+      "all": true,
       "shell": {
         "all": false,
         "open": true
@@ -19,13 +19,12 @@
       "fs": {
         "all": true,
         "scope": [
-          "$AUDIO",
-          "$AUDIO/*"
+          "**"
         ]
       },
       "protocol": {
         "asset": true,
-        "assetScope": ["$AUDIO","$AUDIO/*"]
+        "assetScope": ["**"]
       }
     },
     "windows": [
@@ -36,12 +35,12 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost"
+      "csp": "default-src 'self' https://asset.localhost; img-src 'self' asset: https://asset.localhost"
     },
     "bundle": {
       "active": true,
       "targets": "all",
-      "identifier": "com.tauri.dev",
+      "identifier": "com.player.me",
       "icon": [
         "icons/32x32.png",
         "icons/128x128.png",
