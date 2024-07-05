@@ -72,7 +72,9 @@ fn get_metadata(path: &str) ->HashMap<String, String> {
         None => tagged_file.first_tag().expect("ERROR: No tags found!"),
     };
     let mut r=HashMap::new();
-    r.insert("title".into(), tag.title().as_deref().unwrap_or(path.file_name().unwrap().to_str().unwrap().rsplit_once('.').unwrap().0).into());
+    r.insert("title".into(), tag.title().as_deref().unwrap_or(
+        path.file_name().unwrap().to_str().unwrap().rsplit_once('.').unwrap().0
+    ).into());
     r.insert("artist".into(), tag.artist().as_deref().unwrap_or("-").into());
     r.insert("album".into(), tag.album().as_deref().unwrap_or("-").into());
     //r.insert("lyrics".into(),tag.get_string(&ItemKey::Lyrics).unwrap_or("None").into());

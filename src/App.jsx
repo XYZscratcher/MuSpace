@@ -3,6 +3,7 @@ import { Route,Switch,Link } from "wouter";
 import { readDir } from "@tauri-apps/api/fs"
 import { invoke, convertFileSrc } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog"
+import { appWindow, LogicalSize, PhysicalSize } from '@tauri-apps/api/window';
 
 //import p from "./Player.jsx"
 
@@ -54,6 +55,9 @@ if (s) {
   return [metadata,lst];
 }
 }
+const SIZE = new LogicalSize(1000, 618);
+await appWindow.setSize(SIZE);
+await appWindow.setMinSize(SIZE);
 
 function App() {
   const [nowPlay, setNowPlay] = useState("");
@@ -115,7 +119,7 @@ function App() {
                 {list.map((item, i) => {
                   //if (isMusic(item)) {
                     return <tr key={i}>
-                      <td style={{ width: new CSSUnitValue(50, "px"), textAlign: "center" }}>{i+1}</td>
+                      <td style={{ width: new CSSUnitValue(50, "px"), textAlign: "center" }} className="num">{i+1}</td>
                       <td onClick={() => {
                         setNowPlay(item.name);
                         //player.current.play();
