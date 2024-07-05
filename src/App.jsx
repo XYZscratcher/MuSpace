@@ -15,11 +15,12 @@ let s = true;
 //let metadata = {};
 //var a;
 const isMusic = (name) => {
-  return ["mp3", "m4a", "flac", "wav", "ogg"].includes(name.split(".")[1])
+  return ["mp3", "m4a", "flac", "wav", "ogg"].includes(name.split(".").at(-1))
 }
 //const PATH = "C:\\Users\\Admin\\Music";//暂时写死
 async function loadMusic(path){
 let a;
+let lst=[];
 try {
   a = await readDir(/*localStorage.getItem("path")*/path);
 }
@@ -43,12 +44,14 @@ if (s) {
     for (i of a) {
       if (isMusic(i.name)) {
         let d = await invoke("get_metadata", { path: i.path });
-        metadata[i.name] = d;
+        metadata[d.title] = d;
+        lst.push(d.title)
         //localStorage[i.name]=JSON.stringify(d);
       }
     }
   }
-  return [metadata,a];
+  console.log(lst)
+  return [metadata,lst];
 }
 }
 
@@ -57,12 +60,13 @@ function App() {
   const [path, setPath] = useState(localStorage.getItem("path") ?? NOTHING)
   const [metadata, setMetadata] = useState(null);
   const [list,setList]=useState(null);
+  const [loaded,setLoaded] = useState(false);
   //const [ready,setReady] = useState(false);
   useEffect(() => {
-    if(path){loadMusic(path).then((m)=>{
-      setMetadata(m[0]);setList(m[1])
+    if(path&&!loaded){loadMusic(path).then((m)=>{
+      setMetadata(m[0]);setList(m[1]);setLoaded(true)
     })}
-  },[metadata])
+  })
   //let player = useRef(null);
   return (
     <div className="container">
@@ -109,18 +113,18 @@ function App() {
               </thead>
               <tbody>
                 {list.map((item, i) => {
-                  if (isMusic(item.name)) {
+                  //if (isMusic(item)) {
                     return <tr key={i}>
-                      <td style={{ width: new CSSUnitValue(50, "px"), textAlign: "center" }}>{i}</td>
+                      <td style={{ width: new CSSUnitValue(50, "px"), textAlign: "center" }}>{i+1}</td>
                       <td onClick={() => {
                         setNowPlay(item.name);
                         //player.current.play();
                         console.log(metadata[item.name])
-                      }}>{item.name.split(".")[0]}</td>
-                      <td>{metadata[item.name].artist}</td>
-                      <td>{metadata[item.name].album}</td>
+                      }}>{item}</td>
+                      <td>{metadata[item].artist}</td>
+                      <td>{metadata[item].album}</td>
                     </tr>
-                  }
+                  //}
                 })
                 }
               </tbody>
