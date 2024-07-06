@@ -55,7 +55,7 @@ if (s) {
   return [metadata,lst];
 }
 }
-const SIZE = new LogicalSize(1000, 618);
+const SIZE = new LogicalSize(1100, 1100*0.618);
 await appWindow.setSize(SIZE);
 await appWindow.setMinSize(SIZE);
 
