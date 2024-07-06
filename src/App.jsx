@@ -4,7 +4,7 @@ import { readDir } from "@tauri-apps/api/fs"
 import { invoke, convertFileSrc } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog"
 import { appWindow, LogicalSize, PhysicalSize } from '@tauri-apps/api/window';
-
+import Plyr from "plyr";
 //import p from "./Player.jsx"
 
 import "./App.css"
@@ -46,7 +46,7 @@ if (s) {
       if (isMusic(i.name)) {
         let d = await invoke("get_metadata", { path: i.path });
         metadata[d.title] = d;
-        lst.push(d.title)
+        lst.push(new Map([["title",d.title],["fileName",d.file_name]]))
         //localStorage[i.name]=JSON.stringify(d);
       }
     }
@@ -65,6 +65,7 @@ function App() {
   const [metadata, setMetadata] = useState(null);
   const [list,setList]=useState(null);
   const [loaded,setLoaded] = useState(false);
+  //const p = new Plyr("#player");
   //const [ready,setReady] = useState(false);
   useEffect(() => {
     if(path&&!loaded){loadMusic(path).then((m)=>{
@@ -121,12 +122,12 @@ function App() {
                     return <tr key={i}>
                       <td style={{ width: new CSSUnitValue(50, "px"), textAlign: "center" }} className="num">{i+1}</td>
                       <td onClick={() => {
-                        setNowPlay(item.name);
+                        setNowPlay(item.get("fileName"));
                         //player.current.play();
-                        console.log(metadata[item.name])
-                      }}>{item}</td>
-                      <td>{metadata[item].artist}</td>
-                      <td>{metadata[item].album}</td>
+                        console.log(metadata[item])
+                      }}>{item.get("title")}</td>
+                      <td>{metadata[item.get("title")].artist}</td>
+                      <td>{metadata[item.get("title")].album}</td>
                     </tr>
                   //}
                 })
@@ -140,7 +141,7 @@ function App() {
           </Switch>
         </div>
         <div className="footer">
-          <audio src={nowPlay ? convertFileSrc(path + "/" + nowPlay) : ""} controls autoPlay></audio>
+          <audio id="player" src={nowPlay ? convertFileSrc(path + "/" + nowPlay) : ""} controls autoPlay></audio>
         </div>
       </div>
     </div>
