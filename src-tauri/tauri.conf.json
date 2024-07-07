@@ -51,9 +51,6 @@
       "windows":{
         "wix": {
           "license": "../LICENSE.txt"
-        },
-        "nsis": {
-          "license": "../LICENSE.txt"
         }
       }
     }
