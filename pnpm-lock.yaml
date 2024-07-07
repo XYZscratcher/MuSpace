@@ -26,6 +26,9 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
+  react-lrc:
+    specifier: ^3.2.1
+    version: 3.2.1(react-dom@18.2.0)(react@18.2.0)
   wouter:
     specifier: ^3.3.0
     version: 3.3.0(react@18.2.0)
@@ -856,6 +859,10 @@ packages:
       supports-color: 5.5.0
     dev: true
 
+  /clrc@3.1.4:
+    resolution: {integrity: sha512-lNWVrD2u+PRB9sQimJOjpAUdqRNsgQgx2c+oI00Uqxt4p2Aiusx0MlPLNjXs5t0mqQqz7UlyzqTIHVPIAjAGLg==}
+    dev: false
+
   /color-convert@1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
     dependencies:
@@ -1070,6 +1077,18 @@ packages:
       scheduler: 0.23.2
     dev: false
 
+  /react-lrc@3.2.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-CRmjtFjjL6Y4RLGSgBxpP7RD9rAJqLLJeRKbC7TYzBFxWFQysOzc2j1dtjGc8rOsOMz6Pfeh4352qUh97dBhZA==}
+    peerDependencies:
+      react: '>=17.0.0'
+      react-dom: '>=17.0.0'
+    dependencies:
+      clrc: 3.1.4
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      resize-observer-polyfill: 1.5.1
+    dev: false
+
   /react-refresh@0.14.2:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
     engines: {node: '>=0.10.0'}
@@ -1085,6 +1104,10 @@ packages:
   /regexparam@3.0.0:
     resolution: {integrity: sha512-RSYAtP31mvYLkAHrOlh25pCNQ5hWnT106VukGaaFfuJrZFkGRX5GhUAdPqpSDXxOhA2c4akmRuplv1mRqnBn6Q==}
     engines: {node: '>=8'}
+    dev: false
+
+  /resize-observer-polyfill@1.5.1:
+    resolution: {integrity: sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==}
     dev: false
 
   /rollup@4.18.0:
