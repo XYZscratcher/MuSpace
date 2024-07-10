@@ -11,6 +11,9 @@ dependencies:
   aplayer:
     specifier: ^1.10.1
     version: 1.10.1
+  dayjs:
+    specifier: ^1.11.11
+    version: 1.11.11
   dexie:
     specifier: ^4.0.7
     version: 4.0.7
@@ -888,6 +891,10 @@ packages:
 
   /custom-event-polyfill@1.0.7:
     resolution: {integrity: sha512-TDDkd5DkaZxZFM8p+1I3yAlvM3rSr1wbrOliG4yJiwinMZN8z/iGL7BTlDkrJcYTmgUSb4ywVCc3ZaUtOtC76w==}
+    dev: false
+
+  /dayjs@1.11.11:
+    resolution: {integrity: sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==}
     dev: false
 
   /debug@4.3.5:

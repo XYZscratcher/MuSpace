@@ -93,10 +93,26 @@ fn get_metadata(path: &str) ->HashMap<String, String> {
     //r.insert("cover".into(),format!("data:{};base64,{}",mine_type,base64));//too long
     r
 }
+#[tauri::command]
+fn get_lyrics(path: &str) ->String {
+    let path = Path::new(&path);
+    let tagged_file = Probe::open(path)
+        .expect(format!("ERROR: Bad path provided: {:?}",path).as_str())
+        .read()
+        .expect("ERROR: Failed to read file!");
 
+    let tag = match tagged_file.primary_tag() {
+        Some(primary_tag) => primary_tag,
+        // If the "primary" tag doesn't exist, we just grab the
+        // first tag we can find. Realistically, a tag reader would likely
+        // iterate through the tags to find a suitable one.
+        None => tagged_file.first_tag().expect("ERROR: No tags found!"),
+    };
+    tag.get_string(&ItemKey::Lyrics).unwrap_or("None").into()
+}
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_metadata,has_changed])
+        .invoke_handler(tauri::generate_handler![get_metadata,has_changed,get_lyrics])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { readDir } from "@tauri-apps/api/fs"
-import { invoke, convertFileSrc } from "@tauri-apps/api/tauri";
+import { invoke } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog"
 import { appWindow, LogicalSize, PhysicalSize } from '@tauri-apps/api/window';
 
 import { Route, Switch, Link } from "wouter";
 
 import { Lrc } from "react-lrc"
+
+import Player from "./Player"
 
 import a from "./assets/album.svg"
 import b from "./assets/artist.svg"
@@ -59,14 +61,23 @@ async function loadMusic(path) {
 const SIZE = new LogicalSize(1100, 680);
 await appWindow.setSize(SIZE);
 await appWindow.setMinSize(SIZE);
-
+const defaultFileFormat = new Map([["fileName", ""], ["title", ""]])
+//alert(a)
 function App() {
-  const [nowPlay, setNowPlay] = useState("");
+  
+
+  const [nowPlay, setNowPlay] = useState(defaultFileFormat);
   const [path, setPath] = useState(localStorage.getItem("path") ?? NOTHING)
   const [metadata, setMetadata] = useState(null);
   const [list, setList] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const [lrc, setLrc] = useState(null);
+  const [time,setTime]=useState(0);
+
+  const lineRenderer = useCallback(({active,line:{content}})=>{
+    return <div className={"lrc "+(active?"active":"")}>{content}</div>
+  })
 
   useEffect(() => {
     if (path && !loaded) {
@@ -75,11 +86,17 @@ function App() {
       })
     }
   })
-
+  useEffect(() =>{
+    if(path&&(nowPlay.get("fileName")!=="")){
+      invoke("get_lyrics", { path: path + "/" + nowPlay.get("fileName") }).then((lyrics) => {
+        setLrc(lyrics)
+      })
+    }
+  },[nowPlay])
   return (
     <div className="container">
       <div className="column">
-        
+
         <Link className="icon albums" href="/albums"><img src={a}></img></Link>
         <Link className="icon artists" href="/artists"><img src={b}></img></Link>
         <Link className="icon songs" href="/"><img src={c}></img></Link>
@@ -126,9 +143,9 @@ function App() {
                         return <tr key={i}>
                           <td style={{ width: new CSSUnitValue(50, "px"), textAlign: "center" }} className="num">{i + 1}</td>
                           <td onClick={() => {
-                            setNowPlay(item.get("fileName"));
+                            setNowPlay(item);
                             //player.current.play();
-                            console.log(metadata[item])
+                            console.log(metadata[item.get("title")])
                           }}>{item.get("title")}</td>
                           <td>{metadata[item.get("title")].artist}</td>
                           <td>{metadata[item.get("title")].album}</td>
@@ -145,10 +162,15 @@ function App() {
           </Switch>
         </div>
         <div className="footer">
-          <audio id="player" src={nowPlay ? convertFileSrc(path + "/" + nowPlay) : ""} controls autoPlay></audio>
+          <Player nowPlay={nowPlay} path={path ?? ""} fn={setFullscreen} fn2={setTime} />
         </div>
       </div>
-      <div className={fullscreen?"fullscreen":"hide"}>vds</div>
+      <div className={fullscreen ? "fullscreen" : "hide"}>
+        <button onClick={() => { setFullscreen(false) }}>退出全屏</button>
+        {(console.log(lrc))}
+        {lrc &&<Lrc id="lrcs" lrc={lrc}
+          lineRenderer={lineRenderer} verticalSpace currentMillisecond={(time*1000).toFixed()}></Lrc>}
+      </div>
     </div>
   );
 }

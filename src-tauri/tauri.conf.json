@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "music-player-new",
-    "version": "0.1.3"
+    "version": "0.2.0"
   },
   "tauri": {
     "allowlist": {
@@ -35,7 +35,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self' https://asset.localhost; img-src 'self' asset: https://asset.localhost"
+      "csp": "default-src 'self' https://asset.localhost; img-src * asset: https://asset.localhost"
     },
     "bundle": {
       "active": true,
