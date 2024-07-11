@@ -21,6 +21,8 @@ import "./App.css"
 const NOTHING = null;
 let s = true;
 
+
+
 const isMusic = (name) => {
   return ["mp3", "m4a", "flac", "wav", "ogg"].includes(name.split(".").at(-1))
 }
@@ -182,7 +184,7 @@ function App() {
           }}>
         <img src={convertFileSrc(nowPlay.get("cover"))} style={{
             display: "block",
-            width: "80%",
+            width: "min(80%,15rem)",
             borderRadius: "1rem",
           }} />
           <div style={{ flex: 1 }}>
@@ -197,7 +199,6 @@ function App() {
         {lrc && <Lrc id="lrcs" lrc={lrc}
           lineRenderer={lineRenderer} verticalSpace currentMillisecond={(time * 1000).toFixed()}></Lrc>}
           </div>
-        {(void writeText(lrc ?? ""))}
       </div>
     </div>
     </div>

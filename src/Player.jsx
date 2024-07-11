@@ -16,19 +16,34 @@ export default (name,artist,
         },
     ]
 });*/
-import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { useEffect, useRef, useState } from 'react'
+
+import { convertFileSrc } from '@tauri-apps/api/tauri'
+
+import * as dayjs from "dayjs"
+import d from "dayjs/plugin/duration"
+dayjs.extend(d)
+const toFormattedDuration=(p)=>{    
+    let min=dayjs.duration(p*1000).minutes()
+    let sec=dayjs.duration(p*1000).seconds()
+    let result=dayjs.duration({
+        minutes: min,
+        seconds: sec
+    }).format("mm:ss")
+    return result
+}
 export default function Player({ nowPlay, path, fn, fn2 }) {
     let player = useRef(null);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+    
     useEffect(() => {
-        setDuration(player.current.duration.toFixed(0))
+        setDuration(toFormattedDuration(player.current.duration.toFixed(0)))
     })
     useEffect(() => {
         const id = setInterval(() => {
             let t = player.current.currentTime;
-            setCurrentTime(t.toFixed(0))
+            setCurrentTime(toFormattedDuration(t.toFixed(0)))
             fn2(t)
         }, 100);
         return () => clearInterval(id);
