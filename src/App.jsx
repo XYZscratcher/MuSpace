@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { readDir } from "@tauri-apps/api/fs"
-import { invoke } from "@tauri-apps/api/tauri";
+import { convertFileSrc, invoke } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog"
 import { appWindow, LogicalSize, PhysicalSize } from '@tauri-apps/api/window';
+import { writeText } from '@tauri-apps/api/clipboard';
 
 import { Route, Switch, Link } from "wouter";
 
@@ -48,8 +49,9 @@ async function loadMusic(path) {
         if (isMusic(i.name)) {
           let d = await invoke("get_metadata", { path: i.path });
           metadata[d.title] = d;
-          lst.push(new Map([["title", d.title], ["fileName", d.file_name]]))
-
+          let t={...d,fileName:d.file_name}
+          lst.push(new Map(Object.entries(t)))
+          console.log(d.cover)
         }
       }
     }
@@ -64,8 +66,6 @@ await appWindow.setMinSize(SIZE);
 const defaultFileFormat = new Map([["fileName", ""], ["title", ""]])
 //alert(a)
 function App() {
-  
-
   const [nowPlay, setNowPlay] = useState(defaultFileFormat);
   const [path, setPath] = useState(localStorage.getItem("path") ?? NOTHING)
   const [metadata, setMetadata] = useState(null);
@@ -73,10 +73,10 @@ function App() {
   const [loaded, setLoaded] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [lrc, setLrc] = useState(null);
-  const [time,setTime]=useState(0);
+  const [time, setTime] = useState(0);
 
-  const lineRenderer = useCallback(({active,line:{content}})=>{
-    return <div className={"lrc "+(active?"active":"")}>{content}</div>
+  const lineRenderer = useCallback(({ active, line: { content } }) => {
+    return <div className={"lrc " + (active ? "active" : "")}>{content}</div>
   })
 
   useEffect(() => {
@@ -86,13 +86,13 @@ function App() {
       })
     }
   })
-  useEffect(() =>{
-    if(path&&(nowPlay.get("fileName")!=="")){
+  useEffect(() => {
+    if (path && (nowPlay.get("fileName") !== "")) {
       invoke("get_lyrics", { path: path + "/" + nowPlay.get("fileName") }).then((lyrics) => {
         setLrc(lyrics)
       })
     }
-  },[nowPlay])
+  }, [nowPlay])
   return (
     <div className="container">
       <div className="column">
@@ -167,10 +167,39 @@ function App() {
       </div>
       <div className={fullscreen ? "fullscreen" : "hide"}>
         <button onClick={() => { setFullscreen(false) }}>退出全屏</button>
-        {(console.log(lrc))}
-        {lrc &&<Lrc id="lrcs" lrc={lrc}
-          lineRenderer={lineRenderer} verticalSpace currentMillisecond={(time*1000).toFixed()}></Lrc>}
+        <div style={{
+          display: "flex",
+          height: "100%",
+        }}>
+          <div style={{
+            display: "flex",
+            flex: 2,
+            
+            alignItems: "center",
+            flexDirection: "column",
+            paddingTop: "1rem",
+            textAlign: "center",
+          }}>
+        <img src={convertFileSrc(nowPlay.get("cover"))} style={{
+            display: "block",
+            width: "80%",
+            borderRadius: "1rem",
+          }} />
+          <div style={{ flex: 1 }}>
+          <p>{nowPlay.get("title")}</p>
+          <p>{nowPlay.get("artist")}</p>
+            </div>
+          </div>{/*TODO:布局*/}
+          <div style={{
+            flex: 3,
+            height:"100%"
+          }}>
+        {lrc && <Lrc id="lrcs" lrc={lrc}
+          lineRenderer={lineRenderer} verticalSpace currentMillisecond={(time * 1000).toFixed()}></Lrc>}
+          </div>
+        {(void writeText(lrc ?? ""))}
       </div>
+    </div>
     </div>
   );
 }
