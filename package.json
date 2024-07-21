@@ -1,7 +1,7 @@
 {
   "name": "music-player-new",
   "private": true,
-  "version": "0.3.1",
+  "version": "0.3.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,6 +12,7 @@
   "dependencies": {
     "@tauri-apps/api": "^1",
     "aplayer": "^1.10.1",
+    "colorthief": "^2.4.0",
     "dayjs": "^1.11.11",
     "dexie": "^4.0.7",
     "dexie-react-hooks": "^1.1.7",

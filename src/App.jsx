@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 
 import { readDir } from "@tauri-apps/api/fs"
 import { convertFileSrc, invoke } from "@tauri-apps/api/tauri";
@@ -9,6 +9,7 @@ import { writeText } from '@tauri-apps/api/clipboard';
 import { Route, Switch, Link } from "wouter";
 
 import { Lrc } from "react-lrc"
+import ct from "colorthief/dist/color-thief.mjs";
 
 import Player from "./Player"
 
@@ -51,7 +52,7 @@ async function loadMusic(path) {
         if (isMusic(i.name)) {
           let d = await invoke("get_metadata", { path: i.path });
           metadata[d.title] = d;
-          let t={...d,fileName:d.file_name}
+          let t = { ...d, fileName: d.file_name }
           lst.push(new Map(Object.entries(t)))
           console.log(d.cover)
         }
@@ -61,7 +62,20 @@ async function loadMusic(path) {
     return [metadata, lst];
   }
 }
-
+const asRGBString = (color) => {
+  return `rgb(${color[0]},${color[1]},${color[2]})`
+}
+const lighten = (color, value) => {
+  return color.map((p) => {
+    return p * value
+  })
+}
+const distanceOfColors = (color1, color2) => {
+  let r = color1[0] - color2[0];
+  let g = color1[1] - color2[1];
+  let b = color1[2] - color2[2];
+  return Math.sqrt(r * r + g * g + b * b);
+}
 const SIZE = new LogicalSize(1100, 680);
 await appWindow.setSize(SIZE);
 await appWindow.setMinSize(SIZE);
@@ -76,6 +90,8 @@ function App() {
   const [fullscreen, setFullscreen] = useState(false);
   const [lrc, setLrc] = useState(null);
   const [time, setTime] = useState(0);
+  const [backgroundColor, setBackgroundColor] = useState(null)
+  const coverImage = useRef(null);
 
   const lineRenderer = useCallback(({ active, line: { content } }) => {
     return <div className={"lrc " + (active ? "active" : "")}>{content}</div>
@@ -95,6 +111,38 @@ function App() {
       })
     }
   }, [nowPlay])
+  useEffect(() => {
+    if ((nowPlay.get("fileName") !== "")) {
+      let c = new ct()
+      coverImage.current.onload = () => {
+        let color = c.getColor(coverImage.current, 10)
+        console.log("color: ", color)
+        setBackgroundColor(asRGBString(lighten(color, 1)))
+        let currentColor = getComputedStyle(document.documentElement).getPropertyValue(
+          "--lrc-color"
+        )
+        console.log("currentColor: ", currentColor)
+        const black = [0, 0, 0],
+          white = [255, 255, 255];
+        const lrc_black = "#111",
+          lrc_dark = "#234",
+          lrc_white = "#eee",
+          lrc_light = "#dcb";
+        const now=currentColor===lrc_dark?black:white;
+        console.log("distance: ", distanceOfColors(color,now))
+        if(distanceOfColors(color,now)<200){
+          document.documentElement.style.setProperty("--lrc-color",now[0]?
+            lrc_dark:lrc_light
+          )
+          document.documentElement.style.setProperty("--lrc-active-color", now[0] ?
+            lrc_black : lrc_white
+          )
+        }
+      }
+    }
+  }
+    , [nowPlay])
+
   return (
     <div className="container">
       <div className="column">
@@ -167,7 +215,9 @@ function App() {
           <Player nowPlay={nowPlay} path={path ?? ""} fn={setFullscreen} fn2={setTime} />
         </div>
       </div>
-      <div className={fullscreen ? "fullscreen" : "hide"}>
+      <div className={fullscreen ? "fullscreen" : "hide"} style={{
+        backgroundColor: backgroundColor ?? "#cde"
+      }}>
         <button onClick={() => { setFullscreen(false) }}>退出全屏</button>
         <div style={{
           display: "flex",
@@ -176,31 +226,31 @@ function App() {
           <div style={{
             display: "flex",
             flex: 2,
-            
+
             alignItems: "center",
             flexDirection: "column",
             paddingTop: "1rem",
             textAlign: "center",
           }}>
-        <img src={convertFileSrc(nowPlay.get("cover"))} style={{
-            display: "block",
-            width: "min(80%,15rem)",
-            borderRadius: "1rem",
-          }} />
-          <div style={{ flex: 1 }}>
-          <p>{nowPlay.get("title")}</p>
-          <p>{nowPlay.get("artist")}</p>
+            <img src={nowPlay.get("cover") ? convertFileSrc(nowPlay.get("cover")) : ""} style={{
+              display: "block",
+              width: "min(80%,15rem)",
+              borderRadius: "1rem",
+            }} crossOrigin="anonymous" ref={coverImage} />
+            <div style={{ flex: 1,color:"var(--lrc-color)" }}>
+              <p>{nowPlay.get("title")}</p>
+              <p>{nowPlay.get("artist")}</p>
             </div>
           </div>{/*TODO:布局*/}
           <div style={{
             flex: 3,
-            height:"100%"
+            height: "100%"
           }}>
-        {lrc && <Lrc id="lrcs" lrc={lrc}
-          lineRenderer={lineRenderer} verticalSpace currentMillisecond={(time * 1000).toFixed()}></Lrc>}
+            {lrc && <Lrc id="lrcs" lrc={lrc}
+              lineRenderer={lineRenderer} verticalSpace currentMillisecond={(time * 1000).toFixed()}></Lrc>}
           </div>
+        </div>
       </div>
-    </div>
     </div>
   );
 }

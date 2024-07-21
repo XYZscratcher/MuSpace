@@ -50,7 +50,9 @@ export default function Player({ nowPlay, path, fn, fn2 }) {
     })
     //if(nowPlay){
 
-    return (<>
+    return (<div style={{
+        padding:"1rem"
+    }}>
         <audio id="player"
             src={nowPlay.get("fileName") !== "" ? convertFileSrc(path + "/" + nowPlay.get("fileName")) : ""}
             ref={player}
@@ -64,5 +66,5 @@ export default function Player({ nowPlay, path, fn, fn2 }) {
         }}>Pause</button>
         <span>{currentTime}</span>/
         <span>{duration}</span>
-    </>)//}
+    </div>)//}
 }
