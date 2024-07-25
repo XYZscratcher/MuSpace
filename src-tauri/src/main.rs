@@ -124,7 +124,10 @@ fn get_metadata(path: &str) -> HashMap<String, String> {
         let mut p=fs::File::create(&tp).unwrap_or_else(|_|panic!("{:?}",tp));
         p.write_all(pic.data()).unwrap();
     }
-    r.insert("cover".into(), format!("{:?}",tp).replace('"', ""));
+    let t=format!("{:?}",tp).replace('"', "").replace(r"\'","'");
+    //dbg!(&t);
+    r.insert("cover".into(), t);
+    
     //let base64=/*URL_SAFE*/BASE64_STANDARD.encode(pic.data());
     //r.insert("cover".into(),format!("data:{};base64,{}",mine_type,base64));//too long
     r

@@ -37,6 +37,9 @@ export default function Player({ nowPlay, path, fn, fn2 }) {
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
     
+    // useEffect(() => {
+    //     player.current.volume=0.5;//TODO:
+    // },[nowPlay])
     useEffect(() => {
         setDuration(toFormattedDuration(player.current.duration.toFixed(0)))
     })
@@ -64,7 +67,12 @@ export default function Player({ nowPlay, path, fn, fn2 }) {
         <button onClick={() => {
             player.current.pause();
         }}>Pause</button>
+        &nbsp;
         <span>{currentTime}</span>/
         <span>{duration}</span>
+        &nbsp;
+        volume:<input type="range" min="0" max="1" step="0.01" onChange={(e) => {
+            player.current.volume = e.target.value;
+        }} style={{verticalAlign:"middle"}}></input>
     </div>)//}
 }
