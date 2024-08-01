@@ -20,9 +20,10 @@ async function loadMusic(path) {
         for (i of a) {
             if (isMusic(i.name)) {
                 let d = await invoke("get_metadata", { path: i.path });
-                metadata[d.title] = d;
-                let t = { ...d, fileName: d.file_name }
-                lst.push(new Map(Object.entries(t)))
+                metadata[d.title] = d;//TODO:metadata是干什么的？
+                //let t = { ...d, fileName: d.file_name }
+
+                lst.push(new Map(Object.entries(d)))
                 console.log(d.cover)
             }
         }

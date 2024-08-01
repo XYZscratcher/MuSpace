@@ -34,8 +34,12 @@ const toFormattedDuration=(p)=>{
 }
 export default function Player({ nowPlay, path, fn, fn2 }) {
     let player = useRef(null);
+    const modes=["loop"/*,"random","list"*/,"single"]
+
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
+    const [mode,setMode]=useState(modes[0])
+    const [loop,setLoop]=useState(true);
     
     // useEffect(() => {
     //     player.current.volume=0.5;//TODO:
@@ -59,7 +63,8 @@ export default function Player({ nowPlay, path, fn, fn2 }) {
         <audio id="player"
             src={nowPlay.get("fileName") !== "" ? convertFileSrc(path + "/" + nowPlay.get("fileName")) : ""}
             ref={player}
-            autoPlay></audio>
+            autoPlay
+            loop={loop}></audio>
         <span onClick={fn}>{nowPlay.get("title")}</span>
         <button onClick={() => {
             player.current.play();
@@ -74,5 +79,21 @@ export default function Player({ nowPlay, path, fn, fn2 }) {
         volume:<input type="range" min="0" max="1" step="0.01" onChange={(e) => {
             player.current.volume = e.target.value;
         }} style={{verticalAlign:"middle"}}></input>
+        <button onClick={(e)=>{
+            let newMode = modes[(modes.indexOf(mode) + 1) % modes.length];
+            setMode(newMode)
+            switch(newMode) {
+                case "loop":
+                    setLoop(true);
+                    break;
+                case "single":
+                    setLoop(false);
+                    break;
+                case "random":
+                    setLoop(false);
+                    break;
+            }
+            
+        }}>{mode}</button>
     </div>)//}
 }

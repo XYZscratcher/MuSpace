@@ -10,6 +10,7 @@ import { Lrc } from "react-lrc"
 import ct from "colorthief/dist/color-thief.mjs";
 
 import Player from "./Player"
+import Setting from "./views/Setting";
 
 import loadMusic from "./core/load";
 import {asRGBString, lighten, distanceOfColors} from "./utils/color"
@@ -119,7 +120,7 @@ function App() {
                       })
                     })
                   }}>选择</button>
-                </div> : (metadata ?
+                </div> : (list ?
                   /*显示歌曲列表*/
                   <table>
                     <thead>
@@ -131,15 +132,17 @@ function App() {
                       </tr>
                     </thead>
                     <tbody>
-                      {list.map((item, i) => {                        
+                      {list.map((item, i) => {  
+                        console.log("item: ", item)
+                        console.log("metadata: ", metadata[item.get("title")])                    
                         return <tr key={i}>
                           <td style={{ width: new CSSUnitValue(50, "px"), textAlign: "center" }} className="num">{i + 1}</td>
                           <td onClick={() => {
                             setNowPlay(item);                            
-                            console.log(metadata[item.get("title")])
+                            
                           }}>{item.get("title")}</td>
-                          <td>{metadata[item.get("title")].artist}</td>
-                          <td>{metadata[item.get("title")].album}</td>
+                          <td>{item.get("artist")}</td>
+                          <td>{item.get("album")}</td>
                         </tr>
                       })
                       }
@@ -147,7 +150,7 @@ function App() {
                   </table> :
                   <div>加载中...</div>)}
             </Route>
-            <Route path="/settings">Settings{/*TODO:Add setting component*/}</Route>
+            <Route path="/settings"><Setting /></Route>
             <Route>Coming Soon!</Route>
           </Switch>
         </div>
@@ -187,7 +190,11 @@ function App() {
             height: "100%"
           }}>
             {lrc && <Lrc id="lrcs" lrc={lrc}
-              lineRenderer={lineRenderer} verticalSpace currentMillisecond={(time * 1000).toFixed()}></Lrc>}
+              lineRenderer={lineRenderer} 
+              verticalSpace 
+              currentMillisecond={(time * 1000).toFixed()}
+              recoverAutoScrollInterval={2000}
+              ></Lrc>}
           </div>
         </div>
       </div>
