@@ -59,7 +59,9 @@ body,
   border-radius: 100px;
 }
 
-.footer {}
+.footer {
+  /*z-index: 101;*/
+}
 
 th {
   text-align: left;
@@ -71,6 +73,7 @@ td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: grab;
 }
 
 td:not(.num) {

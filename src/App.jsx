@@ -26,10 +26,18 @@ const NOTHING = null;
 const SIZE = new LogicalSize(1100, 680);
 await appWindow.setSize(SIZE);
 await appWindow.setMinSize(SIZE);
-const defaultFileFormat = new Map([["fileName", ""], ["title", ""]])
+const defaultFileFormat = new Map([["file_name", ""], ["title", ""]])
+function reviver(key, value) {
+  if (typeof value === 'object' && value !== null) {
+    if (value.dataType === 'Map') {
+      return new Map(value.value);
+    }
+  }
+  return value;
+}
 //alert(a)
 function App() {
-  const [nowPlay, setNowPlay] = useState(defaultFileFormat);
+  const [nowPlay, setNowPlay] = useState(JSON.parse(localStorage.getItem("play"),reviver)??defaultFileFormat);
   const [path, setPath] = useState(localStorage.getItem("path") ?? NOTHING)
   const [metadata, setMetadata] = useState(null);
   const [list, setList] = useState(null);
@@ -38,6 +46,8 @@ function App() {
   const [lrc, setLrc] = useState(null);
   const [time, setTime] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState(null)
+  const [play,setPlay]=useState(false);
+
   const coverImage = useRef(null);
 
   const lineRenderer = useCallback(({ active, line: { content } }) => {
@@ -52,14 +62,14 @@ function App() {
     }
   })
   useEffect(() => {
-    if (path && (nowPlay.get("fileName") !== "")) {
-      invoke("get_lyrics", { path: path + "/" + nowPlay.get("fileName") }).then((lyrics) => {
+    if (path && (nowPlay.get("file_name") !== "")) {
+      invoke("get_lyrics", { path: path + "/" + nowPlay.get("file_name") }).then((lyrics) => {
         setLrc(lyrics)
       })
     }
   }, [nowPlay])
   useEffect(() => {
-    if ((nowPlay.get("fileName") !== "")) {
+    if ((nowPlay.get("file_name") !== "")) {
       let c = new ct()
       coverImage.current.onload = () => {
         let color = c.getColor(coverImage.current, 10)
@@ -133,13 +143,13 @@ function App() {
                     </thead>
                     <tbody>
                       {list.map((item, i) => {  
-                        console.log("item: ", item)
-                        console.log("metadata: ", metadata[item.get("title")])                    
+                        //console.log("item: ", item)
+                        //console.log("metadata: ", metadata[item.get("title")])                    
                         return <tr key={i}>
                           <td style={{ width: new CSSUnitValue(50, "px"), textAlign: "center" }} className="num">{i + 1}</td>
                           <td onClick={() => {
                             setNowPlay(item);                            
-                            
+                            setPlay(true);
                           }}>{item.get("title")}</td>
                           <td>{item.get("artist")}</td>
                           <td>{item.get("album")}</td>
@@ -155,7 +165,13 @@ function App() {
           </Switch>
         </div>
         <div className="footer">
-          <Player nowPlay={nowPlay} path={path ?? ""} fn={setFullscreen} fn2={setTime} />
+          <Player nowPlay={nowPlay} 
+          setNowPlay={setNowPlay} 
+          path={path ?? ""} 
+          fn={setFullscreen} 
+          fn2={setTime} 
+          list={list}
+          play={play} />
         </div>
       </div>
       <div className={fullscreen ? "fullscreen" : "hide"} style={{
@@ -193,7 +209,7 @@ function App() {
               lineRenderer={lineRenderer} 
               verticalSpace 
               currentMillisecond={(time * 1000).toFixed()}
-              recoverAutoScrollInterval={2000}
+              recoverAutoScrollInterval={0}
               ></Lrc>}
           </div>
         </div>
