@@ -171,7 +171,8 @@ function App() {
           fn={setFullscreen} 
           fn2={setTime} 
           list={list}
-          play={play} />
+          play={play}
+          setPlay={setPlay} />
         </div>
       </div>
       <div className={fullscreen ? "fullscreen" : "hide"} style={{

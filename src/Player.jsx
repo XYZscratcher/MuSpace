@@ -19,15 +19,17 @@ export default (name,artist,
 import { useEffect, useRef, useState } from 'react'
 
 import { convertFileSrc } from '@tauri-apps/api/tauri'
-import {appWindow} from '@tauri-apps/api/window'
+import { appWindow } from '@tauri-apps/api/window'
 
 import * as dayjs from "dayjs"
 import d from "dayjs/plugin/duration"
+import { Chance } from 'chance'
 dayjs.extend(d)
-const toFormattedDuration=(p)=>{    
-    let min=dayjs.duration(p*1000).minutes()
-    let sec=dayjs.duration(p*1000).seconds()
-    let result=dayjs.duration({
+const chance = new Chance();
+const toFormattedDuration = (p) => {
+    let min = dayjs.duration(p * 1000).minutes()
+    let sec = dayjs.duration(p * 1000).seconds()
+    let result = dayjs.duration({
         minutes: min,
         seconds: sec
     }).format("mm:ss")
@@ -43,18 +45,19 @@ function replacer(key, value) {
         return value;
     }
 }
-export default function Player({ nowPlay, path, fn, fn2,list,setNowPlay,play }) {
+export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,setPlay }) {
     let player = useRef(null);
-    const modes=["loop"/*,"random"*/,"list","single"]
+    const modes = ["loop","random", "list", "single"]
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [mode,setMode]=useState(modes[1])
+    const [mode, setMode] = useState(modes[1])
+    const [played, setPlayed] = useState([])
     //const [loop,setLoop]=useState(mode==="loop");
-    
-     useEffect(() => {
-         player.current.volume=Number(localStorage.getItem("volume"))??1;//TODO:
-     },[nowPlay])
+
+    useEffect(() => {
+        player.current.volume = Number(localStorage.getItem("volume")) ?? 1;//TODO:
+    }, [nowPlay])
     useEffect(() => {
         setDuration(toFormattedDuration(player.current.duration.toFixed(0)))
     })
@@ -66,23 +69,23 @@ export default function Player({ nowPlay, path, fn, fn2,list,setNowPlay,play }) 
         }, 100);
         return () => clearInterval(id);
     })
-    useEffect(()=>{
-        if(play){
+    useEffect(() => {
+        if (play) {
             player.current.play()
         }
-    })
+    },[nowPlay])
     //if(nowPlay){
-//console.log("nowPlay: ", nowPlay)
+    //console.log("nowPlay: ", nowPlay)
     return (<div style={{
-        padding:"1rem",
-       
+        padding: "1rem",
+
     }}>
         <audio id="player"
             src={nowPlay.get("file_name") != "" ? convertFileSrc(path + "/" + nowPlay.get("file_name")) : ""}
             ref={player}
-            
-            onEnded={()=>{
-                console.log("mode: ",mode)
+
+            onEnded={() => {
+                console.log("mode: ", mode)
                 switch (mode) {
                     case "loop":
                         //setLoop(true);
@@ -97,16 +100,31 @@ export default function Player({ nowPlay, path, fn, fn2,list,setNowPlay,play }) 
                     case "list":
                         //setLoop(false);
                         //player.current.addEventListener("ended", (e) => {
-                            setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
-                            player.current.play()
+                        setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
+                        player.current.play()
                         //})
+                        break;
+                    case "random":
+                        //setLoop(false);
+                        try {
+                            let num = chance.natural({ min: 0, max: list.length - 1, exclude: played });
+                            let newList = [...played, num]
+                            setNowPlay(list[num])
+                            setPlayed(newList)
+                        } catch (e) {
+                            //setNowPlay
+                        }
+
+                        player.current.load()//https://developer.chrome.com/blog/play-request-was-interrupted?hl=zh-cn
                         break;
                 }
             }}
-            onLoadStart={()=>{
+            onLoadStart={() => {
+                //player.current.play()
                 console.log("onLoadStart")
                 console.log("nowPlay: ", nowPlay)
-                localStorage.setItem("play", JSON.stringify(nowPlay,replacer))
+                //console.log("test:", chance.natural({ min: 0, max: 1, exclude: [0, 1] }))
+                localStorage.setItem("play", JSON.stringify(nowPlay, replacer))
                 appWindow.setTitle("" + nowPlay.get("title") + " - " + nowPlay.get("artist"))
             }}></audio>
         <span onClick={fn}>{nowPlay.get("title")}</span>
@@ -118,13 +136,15 @@ export default function Player({ nowPlay, path, fn, fn2,list,setNowPlay,play }) 
         }}>Pause</button>
         <button onClick={() => {
             setNowPlay(list[(nowPlay.get("index") - 1) % list.length])
-            player.current.play()
+            if(!play)setPlay(true)
+            //player.current.play()
         }}>
             Previous
         </button>
         <button onClick={() => {
             setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
-            player.current.play()
+            if (!play) setPlay(true)
+            //player.current.play()
         }}>
             Next
         </button>
@@ -132,14 +152,14 @@ export default function Player({ nowPlay, path, fn, fn2,list,setNowPlay,play }) 
         <span>{currentTime}</span>/
         <span>{duration}</span>
         &nbsp;
-        volume:<input type="range" min="0" max="1" step="0.01" defaultValue={Number(localStorage.getItem("volume"))}onChange={(e) => {
+        volume:<input type="range" min="0" max="1" step="0.01" defaultValue={Number(localStorage.getItem("volume"))} onChange={(e) => {
             player.current.volume = e.target.value;
             localStorage.setItem('volume', e.target.value);
-        }} style={{verticalAlign:"middle"}}></input>
-        <button onClick={(e)=>{
+        }} style={{ verticalAlign: "middle" }}></input>
+        <button onClick={(e) => {
             let newMode = modes[(modes.indexOf(mode) + 1) % modes.length];
             setMode(newMode)
-            console.log('new mode', newMode)           
+            console.log('new mode', newMode)
         }}>{mode}</button>
     </div>)//}
 }

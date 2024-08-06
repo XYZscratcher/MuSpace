@@ -11,6 +11,9 @@ dependencies:
   aplayer:
     specifier: ^1.10.1
     version: 1.10.1
+  chance:
+    specifier: ^1.1.12
+    version: 1.1.12
   colorthief:
     specifier: ^2.4.0
     version: 2.4.0
@@ -910,6 +913,10 @@ packages:
       escape-string-regexp: 1.0.5
       supports-color: 5.5.0
     dev: true
+
+  /chance@1.1.12:
+    resolution: {integrity: sha512-vVBIGQVnwtUG+SYe0ge+3MvF78cvSpuCOEUJr7sVEk2vSBuMW6OXNJjSzdtzrlxNUEaoqH2GBd5Y/+18BEB01Q==}
+    dev: false
 
   /clrc@3.1.4:
     resolution: {integrity: sha512-lNWVrD2u+PRB9sQimJOjpAUdqRNsgQgx2c+oI00Uqxt4p2Aiusx0MlPLNjXs5t0mqQqz7UlyzqTIHVPIAjAGLg==}
