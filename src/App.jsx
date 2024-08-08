@@ -74,7 +74,7 @@ function App() {
       coverImage.current.onload = () => {
         let color = c.getColor(coverImage.current, 10)
         console.log("color: ", color)
-        const colorA = lighten(color, 0.9),colorB = lighten(color,1),colorC=lighten(color,1.2);
+        const colorA = lighten(color, 0.8),colorB = lighten(color,1),colorC=lighten(color,1.2);
         setBackgroundColor(`linear-gradient(45deg, ${asRGBString(colorA)},20%,${asRGBString(colorB)},60%,${asRGBString(colorC)})`)
         let currentColor = getComputedStyle(document.documentElement).getPropertyValue(
           "--lrc-color"
