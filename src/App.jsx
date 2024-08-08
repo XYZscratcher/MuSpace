@@ -74,8 +74,8 @@ function App() {
       coverImage.current.onload = () => {
         let color = c.getColor(coverImage.current, 10)
         console.log("color: ", color)
-        color = lighten(color, 0.9);
-        setBackgroundColor(asRGBString(color))
+        const colorA = lighten(color, 0.9),colorB = lighten(color,1),colorC=lighten(color,1.2);
+        setBackgroundColor(`linear-gradient(45deg, ${asRGBString(colorA)},20%,${asRGBString(colorB)},60%,${asRGBString(colorC)})`)
         let currentColor = getComputedStyle(document.documentElement).getPropertyValue(
           "--lrc-color"
         )
@@ -176,7 +176,7 @@ function App() {
         </div>
       </div>
       <div className={fullscreen ? "fullscreen" : "hide"} style={{
-        backgroundColor: backgroundColor ?? "#cde"
+        background: backgroundColor ?? "#cde"
       }}>
         <button onClick={() => { setFullscreen(false) }}>退出全屏</button>
         <div style={{

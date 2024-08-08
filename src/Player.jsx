@@ -24,6 +24,7 @@ import { appWindow } from '@tauri-apps/api/window'
 import * as dayjs from "dayjs"
 import d from "dayjs/plugin/duration"
 import { Chance } from 'chance'
+import { useHotkeys } from 'react-hotkeys-hook'
 dayjs.extend(d)
 const chance = new Chance();
 const toFormattedDuration = (p) => {
@@ -46,6 +47,43 @@ function replacer(key, value) {
     }
 }
 export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,setPlay }) {
+    const next=()=>{
+        console.log("mode: ", mode)
+        switch (mode) {
+            case "loop":
+                //setLoop(true);
+                //player.current.removeEventListener("ended")
+                player.current.load()
+                setNowPlay(nowPlay)
+                
+                player.current.play()
+                break;
+            case "single":
+                //setLoop(false);
+                //player.current.removeEventListener("ended")
+                break;
+            case "list":
+                //setLoop(false);
+                //player.current.addEventListener("ended", (e) => {
+                setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
+                //player.current.play()
+                //})
+                break;
+            case "random":
+                //setLoop(false);
+                try {
+                    let num = chance.natural({ min: 0, max: list.length - 1, exclude: played });
+                    let newList = [...played, num]
+                    setNowPlay(list[num])
+                    setPlayed(newList)
+                } catch (e) {
+                    //setNowPlay
+                }
+
+                player.current.load()//https://developer.chrome.com/blog/play-request-was-interrupted?hl=zh-cn
+                break;
+        }
+    }
     let player = useRef(null);
     const modes = ["loop","random", "list", "single"]
 
@@ -74,6 +112,10 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
             player.current.play()
         }
     },[nowPlay])
+    useHotkeys("space", () => {
+        player.current.paused?player.current.play():player.current.pause()
+    })
+    useHotkeys("ctrl+n",next)
     //if(nowPlay){
     //console.log("nowPlay: ", nowPlay)
     return (<div style={{
@@ -84,41 +126,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
             src={nowPlay.get("file_name") != "" ? convertFileSrc(path + "/" + nowPlay.get("file_name")) : ""}
             ref={player}
 
-            onEnded={() => {
-                console.log("mode: ", mode)
-                switch (mode) {
-                    case "loop":
-                        //setLoop(true);
-                        //player.current.removeEventListener("ended")
-                        setNowPlay(nowPlay)//FIXME:?不知道需不需要
-                        player.current.play()
-                        break;
-                    case "single":
-                        //setLoop(false);
-                        //player.current.removeEventListener("ended")
-                        break;
-                    case "list":
-                        //setLoop(false);
-                        //player.current.addEventListener("ended", (e) => {
-                        setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
-                        player.current.play()
-                        //})
-                        break;
-                    case "random":
-                        //setLoop(false);
-                        try {
-                            let num = chance.natural({ min: 0, max: list.length - 1, exclude: played });
-                            let newList = [...played, num]
-                            setNowPlay(list[num])
-                            setPlayed(newList)
-                        } catch (e) {
-                            //setNowPlay
-                        }
-
-                        player.current.load()//https://developer.chrome.com/blog/play-request-was-interrupted?hl=zh-cn
-                        break;
-                }
-            }}
+            onEnded={next}
             onLoadStart={() => {
                 //player.current.play()
                 console.log("onLoadStart")
@@ -142,8 +150,10 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
             Previous
         </button>
         <button onClick={() => {
-            setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
+            //setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
             if (!play) setPlay(true)
+            next()
+            
             //player.current.play()
         }}>
             Next
