@@ -13,7 +13,7 @@ import Player from "./Player"
 import Setting from "./views/Setting";
 
 import loadMusic from "./core/load";
-import {asRGBString, lighten, distanceOfColors} from "./utils/color"
+import {asRGBString, lighten, distanceOfColors, darken} from "./utils/color"
 
 import a from "./assets/album.svg"
 import b from "./assets/artist.svg"
@@ -72,10 +72,18 @@ function App() {
     if ((nowPlay.get("file_name") !== "")) {
       let c = new ct()
       coverImage.current.onload = () => {
-        let color = c.getColor(coverImage.current, 10)
-        console.log("color: ", color)
-        const colorA = lighten(color, 0.8),colorB = lighten(color,1),colorC=lighten(color,1.2);
-        setBackgroundColor(`linear-gradient(45deg, ${asRGBString(colorA)},20%,${asRGBString(colorB)},60%,${asRGBString(colorC)})`)
+
+        // let color = c.getColor(coverImage.current, 10)
+        // console.log("color: ", color)
+        // const colorA = darken(color, 2),colorB = lighten(color,0),colorC=lighten(color,2);
+        // setBackgroundColor(`linear-gradient(45deg, ${asRGBString(colorA)},20%,${asRGBString(colorB)},60%,${asRGBString(colorC)})`)
+
+        let [color1,color2]=c.getPalette(coverImage.current, 2, 10)
+        console.log("color1: ", color1)
+        console.log("color2: ", color2)
+        setBackgroundColor(`linear-gradient(40deg, ${asRGBString(color1)},50%,${asRGBString(color2)})`)
+        let color=color2;
+
         let currentColor = getComputedStyle(document.documentElement).getPropertyValue(
           "--lrc-color"
         )

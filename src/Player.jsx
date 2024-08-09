@@ -25,6 +25,7 @@ import * as dayjs from "dayjs"
 import d from "dayjs/plugin/duration"
 import { Chance } from 'chance'
 import { useHotkeys } from 'react-hotkeys-hook'
+//import { unregister,register } from '@tauri-apps/api/globalShortcut'
 dayjs.extend(d)
 const chance = new Chance();
 const toFormattedDuration = (p) => {
@@ -46,9 +47,12 @@ function replacer(key, value) {
         return value;
     }
 }
+//unregister("space")
+
 export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,setPlay }) {
     const next=()=>{
         console.log("mode: ", mode)
+        if(!play)setPlay(true)
         switch (mode) {
             case "loop":
                 //setLoop(true);
@@ -116,6 +120,9 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
         player.current.paused?player.current.play():player.current.pause()
     })
     useHotkeys("ctrl+n",next)
+    // register("space", () => {
+    //     player.current.paused ? player.current.play() : player.current.pause()
+    // })
     //if(nowPlay){
     //console.log("nowPlay: ", nowPlay)
     return (<div style={{
