@@ -11,8 +11,11 @@ import ct from "colorthief/dist/color-thief.mjs";
 
 import Player from "./Player"
 import Setting from "./views/Setting";
+import Songs from "./views/Songs";
+import Artists from "./views/Artists";
 
-import loadMusic from "./core/load";
+
+import getFP from "./core/canvasFP"
 import {asRGBString, lighten, distanceOfColors, darken} from "./utils/color"
 
 import a from "./assets/album.svg"
@@ -27,6 +30,9 @@ const SIZE = new LogicalSize(1100, 680);
 await appWindow.setSize(SIZE);
 await appWindow.setMinSize(SIZE);
 const defaultFileFormat = new Map([["file_name", ""], ["title", ""]])
+//console.log(getFP().hash)
+
+
 function reviver(key, value) {
   if (typeof value === 'object' && value !== null) {
     if (value.dataType === 'Map') {
@@ -41,7 +47,7 @@ function App() {
   const [path, setPath] = useState(localStorage.getItem("path") ?? NOTHING)
   const [metadata, setMetadata] = useState(null);
   const [list, setList] = useState(null);
-  const [loaded, setLoaded] = useState(false);
+  //const [loaded, setLoaded] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
   const [lrc, setLrc] = useState(null);
   const [time, setTime] = useState(0);
@@ -51,16 +57,11 @@ function App() {
   const coverImage = useRef(null);
 
   const lineRenderer = useCallback(({ active, line: { content } }) => {
-    return <div className={"lrc " + (active ? "active" : "")}>{content}</div>
+    return <div className={"lrc " + (active ? "active" : "")}>{content/*.match(/[\w\s"'?!.(),:\-]+/)*/}</div>
+    //fake "pure English" mode
   })
 
-  useEffect(() => {
-    if (path && !loaded) {
-      loadMusic(path).then((m) => {
-        setMetadata(m[0]); setList(m[1]); setLoaded(true)
-      })
-    }
-  })
+  
   useEffect(() => {
     if (path && (nowPlay.get("file_name") !== "")) {
       invoke("get_lyrics", { path: path + "/" + nowPlay.get("file_name") }).then((lyrics) => {
@@ -73,16 +74,16 @@ function App() {
       let c = new ct()
       coverImage.current.onload = () => {
 
-        // let color = c.getColor(coverImage.current, 10)
-        // console.log("color: ", color)
-        // const colorA = darken(color, 2),colorB = lighten(color,0),colorC=lighten(color,2);
-        // setBackgroundColor(`linear-gradient(45deg, ${asRGBString(colorA)},20%,${asRGBString(colorB)},60%,${asRGBString(colorC)})`)
+        let color = c.getColor(coverImage.current, 10)
+        console.log("color: ", color)
+        const colorA = darken(color, 2),colorB = lighten(color,0),colorC=lighten(color,2);
+        setBackgroundColor(`linear-gradient(45deg, ${asRGBString(colorA)},20%,${asRGBString(colorB)},60%,${asRGBString(colorC)})`)
 
-        let [color1,color2]=c.getPalette(coverImage.current, 2, 10)
-        console.log("color1: ", color1)
-        console.log("color2: ", color2)
-        setBackgroundColor(`linear-gradient(40deg, ${asRGBString(color1)},50%,${asRGBString(color2)})`)
-        let color=color2;
+        // let [color1,color2]=c.getPalette(coverImage.current, 2, 10)
+        // console.log("color1: ", color1)
+        // console.log("color2: ", color2)
+        // setBackgroundColor(`linear-gradient(40deg, ${asRGBString(darken(color1,5))},50%,${asRGBString(darken(color2,3))})`)
+        // let color=darken(color2,3);
 
         let currentColor = getComputedStyle(document.documentElement).getPropertyValue(
           "--lrc-color"
@@ -117,59 +118,18 @@ function App() {
         <Link className="icon songs" href="/"><img src={c}></img></Link>
         <Link className="icon settings" href="/settings"><img src={d}></img></Link>
       </div>
-      <div className="body">
+      {//<div className="body">
+      }
         <div className="header">
           <input className="search" placeholder="Search for something..." />
         </div>
         <div className="content">
           <Switch>
             <Route path="/">
-              {path === NOTHING ?
-                <div>
-                  <h1>选择文件夹</h1>
-                  <button onClick={() => {
-                    open({
-                      directory: true,
-                      multiple: false
-                    }).then((v) => {
-                      setPath(v); localStorage.setItem('path', v);
-                      loadMusic(v).then((m) => {
-                        setMetadata(m[0]); setList(m[1])
-                      })
-                    })
-                  }}>选择</button>
-                </div> : (list ?
-                  /*显示歌曲列表*/
-                  <table>
-                    <thead>
-                      <tr>
-                        <th style={{ textAlign: "center", paddingRight: "0.7rem" }}>#</th>
-                        <th>name</th>
-                        <th>artist</th>
-                        <th>album</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {list.map((item, i) => {  
-                        //console.log("item: ", item)
-                        //console.log("metadata: ", metadata[item.get("title")])                    
-                        return <tr key={i}>
-                          <td style={{ width: new CSSUnitValue(50, "px"), textAlign: "center" }} className="num">{i + 1}</td>
-                          <td onClick={() => {
-                            setNowPlay(item);                            
-                            setPlay(true);
-                          }}>{item.get("title")}</td>
-                          <td>{item.get("artist")}</td>
-                          <td>{item.get("album")}</td>
-                        </tr>
-                      })
-                      }
-                    </tbody>
-                  </table> :
-                  <div>加载中...</div>)}
+              <Songs path={path} setPath={setPath} setMetadata={setMetadata} setList={setList} setNowPlay={setNowPlay} setPlay={setPlay} list={list} />
             </Route>
             <Route path="/settings"><Setting /></Route>
-            <Route>Coming Soon!</Route>
+            <Route path="/artists"><Artists /></Route>
           </Switch>
         </div>
         <div className="footer">
@@ -182,7 +142,8 @@ function App() {
           play={play}
           setPlay={setPlay} />
         </div>
-      </div>
+      {//</div>
+      }
       <div className={fullscreen ? "fullscreen" : "hide"} style={{
         background: backgroundColor ?? "#cde"
       }}>

@@ -28,7 +28,7 @@ async function loadMusic(path) {
                 
                 d.artist in tongji?tongji[d.artist]+=1:tongji[d.artist]=1
                 lst.push(new Map(Object.entries(d)))
-                console.log(d.cover)
+                //console.log(d.cover)
             }
         }
     }
