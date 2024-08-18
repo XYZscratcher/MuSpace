@@ -26,6 +26,7 @@ import d from "dayjs/plugin/duration"
 import { Chance } from 'chance'
 import { useHotkeys } from 'react-hotkeys-hook'
 //import { unregister,register } from '@tauri-apps/api/globalShortcut'
+import { replacer } from './utils/storageHelper'
 dayjs.extend(d)
 const chance = new Chance();
 const toFormattedDuration = (p) => {
@@ -37,19 +38,10 @@ const toFormattedDuration = (p) => {
     }).format("mm:ss")
     return result
 }
-function replacer(key, value) {
-    if (value instanceof Map) {
-        return {
-            dataType: 'Map',
-            value: Array.from(value.entries()), // or with spread: value: [...value]
-        };
-    } else {
-        return value;
-    }
-}
+const DEFAULT_TITLE="Echo of Undefined"
 //unregister("space")
 
-export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,setPlay }) {
+export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,setPlay,fullscreen }) {
     const next=()=>{
         console.log("mode: ", mode)
         if(!play)setPlay(true)
@@ -130,7 +122,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
 
     }}>
         <audio id="player"
-            src={nowPlay.get("file_name") != "" ? convertFileSrc(path + "/" + nowPlay.get("file_name")) : ""}
+            src={nowPlay.file_name != "" ? convertFileSrc(path + "/" + nowPlay.file_name) : ""}
             ref={player}
 
             onEnded={next}
@@ -140,9 +132,9 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                 console.log("nowPlay: ", nowPlay)
                 //console.log("test:", chance.natural({ min: 0, max: 1, exclude: [0, 1] }))
                 localStorage.setItem("play", JSON.stringify(nowPlay, replacer))
-                appWindow.setTitle("" + nowPlay.get("title") + " - " + nowPlay.get("artist"))
+                appWindow.setTitle("" + nowPlay.title + " - " + nowPlay.artist)
             }}></audio>
-        <span onClick={fn}>{nowPlay.get("title")}</span>
+        <span onClick={()=>fn(!fullscreen)}>{nowPlay.title??DEFAULT_TITLE}</span>
         <button onClick={() => {
             player.current.play();
         }}>Play</button>

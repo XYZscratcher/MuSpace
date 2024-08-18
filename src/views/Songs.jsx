@@ -1,4 +1,6 @@
 import loadMusic from "../core/load";
+import { audioDir } from '@tauri-apps/api/path';
+const audioDirPath = await audioDir();
 import { useEffect } from "react";
 export default function({path,setMetadata,setList,list,setNowPlay,setPlay,setPath}){    
     useEffect(() => {
@@ -11,7 +13,7 @@ export default function({path,setMetadata,setList,list,setNowPlay,setPlay,setPat
     return (<>{
         path === null ?
         <div>
-            <h1>选择文件夹</h1>
+            <h1>选择文件夹，开启你的音乐之旅...</h1>
             <button onClick={() => {
                 open({
                     directory: true,
@@ -23,6 +25,12 @@ export default function({path,setMetadata,setList,list,setNowPlay,setPlay,setPat
                     })
                 })
             }}>选择</button>
+            <button onClick={()=>{
+                    setPath(audioDirPath); localStorage.setItem('path', audioDirPath);
+                    loadMusic(audioDirPath).then((m) => {
+                        setMetadata(m[0]); setList(m[1])
+                    })
+            }}>自动导入</button>
         </div> : (list ?
             /*显示歌曲列表*/
             <table>
@@ -51,6 +59,6 @@ export default function({path,setMetadata,setList,list,setNowPlay,setPlay,setPat
                     }
                 </tbody>
             </table> :
-            <div>加载中...</div>)
+            <div>{/*加载中...*/}</div>)
     }</>)
 }

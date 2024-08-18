@@ -65,6 +65,13 @@ fn has_changed(path: &str) -> bool {
     r
 }
 #[tauri::command]
+fn get_metadata_of_files(paths: Vec<&str>) -> Vec<HashMap<String, String>> {
+    let mut r = Vec::new();
+    for path in paths {
+        r.push(get_metadata(path));
+    }
+    r
+}
 fn get_metadata(path: &str) -> HashMap<String, String> {
     let path = Path::new(&path);
     let tagged_file = Probe::open(path)
@@ -124,9 +131,10 @@ fn get_metadata(path: &str) -> HashMap<String, String> {
         let mut p=fs::File::create(&tp).unwrap_or_else(|_|panic!("{:?}",tp));
         p.write_all(pic.data()).unwrap();
     }
-    let t=format!("{:?}",tp).replace('"', "").replace(r"\'","'");
+    let t=format!("{:?}",tp).replace('"', "").replace(r"\'","'").replace(r#"\\"#,r#"\"#);
     //dbg!(&t);
     r.insert("cover".into(), t);
+    //println!("{}", r.get("cover").unwrap());
     
     //let base64=/*URL_SAFE*/BASE64_STANDARD.encode(pic.data());
     //r.insert("cover".into(),format!("data:{};base64,{}",mine_type,base64));//too long
@@ -152,7 +160,7 @@ fn get_lyrics(path: &str) -> String {
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            get_metadata,
+            get_metadata_of_files,
             has_changed,
             get_lyrics
         ])
