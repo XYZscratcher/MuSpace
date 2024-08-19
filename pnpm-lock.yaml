@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@tabler/icons-react':
+    specifier: ^3.12.0
+    version: 3.12.0(react@18.2.0)
   '@tauri-apps/api':
     specifier: ^1
     version: 1.0.0
@@ -670,6 +673,19 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@tabler/icons-react@3.12.0(react@18.2.0):
+    resolution: {integrity: sha512-RnJl3HrCqInuC8JJEUxWuYP4OFNYnY2EUtBqZFSpYatPKY3AnvJBIrShJLHf3fiLPpo6xEYAIoB7Qow93JX0fQ==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      '@tabler/icons': 3.12.0
+      react: 18.2.0
+    dev: false
+
+  /@tabler/icons@3.12.0:
+    resolution: {integrity: sha512-Im37ar/mQkqLb6XUXsU7nOc4/66VB9/3KLuZ+6tUsJKHHNLaDUkYfCTNG3pnGDI03laByxVf5+umSNK2yPTx8A==}
+    dev: false
 
   /@tauri-apps/api@1.0.0:
     resolution: {integrity: sha512-sPnq8/WQumCnyHERTeqKQiryRoM8X4ImMT7K+BJ3zT7bmp/n5162fZS/ZqYIFxKHgQqzwWqT7C96Sb0/CL7WsA==}

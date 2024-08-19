@@ -17,6 +17,7 @@ body,
   height: 100vh;
   display: grid;
   grid-template:"nav head" 50px "nav  main" 1fr "foot  foot" 60px / 80px 1fr;
+  overflow: hidden;
 } 
 
 .column {
@@ -64,7 +65,11 @@ body,
 
 .footer {
   grid-area: foot;
-  /*z-index: 101;*/
+  /*backdrop-filter: blur(10em);  */
+  z-index: 101;
+}
+.footer:has(+.fullscreen){
+  color: var(--lrc-active-color);
 }
 
 th {
@@ -113,7 +118,7 @@ tr:hover {}
   left:0px;
   z-index: 100;
   width: calc(100% - 0px);
-  height: calc(100% - 60px);
+  height: calc(100% - 0px);
   overflow: hidden;
 }
 
@@ -123,7 +128,7 @@ tr:hover {}
 }
 
 #lrcs {
-  height: 100%;
+  height: calc(100% - 60px);
   scrollbar-width: none;
 
 }

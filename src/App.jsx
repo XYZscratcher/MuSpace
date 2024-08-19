@@ -17,14 +17,21 @@ import Artists from "./views/Artists";
 import UserData from "./views/UserData";
 
 
-import getFP from "./core/canvasFP"
+//import getFP from "./core/canvasFP"
 import { asRGBString, lighten, distanceOfColors, darken } from "./utils/color"
-import { reviver } from "./utils/storageHelper";
+//import { reviver } from "./utils/storageHelper";
 
-import a from "./assets/album.svg"
+/*import a from "./assets/album.svg"
 import b from "./assets/artist.svg"
 import c from "./assets/library_music.svg"
-import d from "./assets/settings.svg"
+import d from "./assets/settings.svg"*/
+import {
+  IconUserSquareRounded,
+  IconUsers,
+  IconMusic,
+  IconVinyl,
+  IconSettings
+} from "@tabler/icons-react";
 import "./App.css"
 
 const NOTHING = null;
@@ -35,7 +42,7 @@ await appWindow.setMinSize(SIZE);
 const defaultFileFormat = new Map([["file_name", ""], ["title", ""]])
 //console.log(getFP().hash)
 
-
+const ICON_SIZE = 36
 
 //alert(a)
 function App() {
@@ -59,7 +66,7 @@ function App() {
 
 
   useEffect(() => {
-    if (path && (nowPlay.file_name !== "")) {
+    if (path && nowPlay.file_name) {
       invoke("get_lyrics", { path: path + "/" + nowPlay.file_name }).then((lyrics) => {
         setLrc(lyrics)
       })
@@ -109,11 +116,11 @@ function App() {
   return (
     <div className="container">
       <div className="column">
-        <Link href="/user_data">个人信息</Link>
-        <Link className="icon albums" href="/albums"><img src={a}></img></Link>
-        <Link className="icon artists" href="/artists"><img src={b}></img></Link>
-        <Link className="icon songs" href="/"><img src={c}></img></Link>
-        <Link className="icon settings" href="/settings"><img src={d}></img></Link>
+        <Link className="icon" href="/user_data"><IconUserSquareRounded size={ICON_SIZE + 12} color="#5a5a5a"></IconUserSquareRounded></Link>
+        <Link className="icon albums" href="/albums"><IconVinyl size={ICON_SIZE} color="#5a5a5a"></IconVinyl></Link>
+        <Link className="icon artists" href="/artists"><IconUsers size={ICON_SIZE} color="#5a5a5a"></IconUsers></Link>
+        <Link className="icon songs" href="/"><IconMusic size={ICON_SIZE} color="#5a5a5a"></IconMusic></Link>
+        <Link className="icon settings" href="/settings"><IconSettings size={ICON_SIZE} color="#5a5a5a"></IconSettings></Link>
       </div>
       {//<div className="body">
       }
@@ -147,7 +154,7 @@ function App() {
       <div className={fullscreen ? "fullscreen" : "hide"} style={{
         background: backgroundColor ?? "#cde"
       }}>
-        <button onClick={() => { setFullscreen(false) }}>退出全屏</button>
+        {/*<button onClick={() => { setFullscreen(false) }}>退出全屏</button>*/}
         <div style={{
           display: "flex",
           height: "100%",

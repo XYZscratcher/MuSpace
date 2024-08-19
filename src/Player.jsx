@@ -1,21 +1,3 @@
-/*import 'APlayer/dist/APlayer.min.css';
-import APlayer from 'APlayer';
-
-export default (name,artist,
-            url,
-            cover,
-            lrc,)=>new APlayer({
-    audio:[
-        {
-            name,
-            artist,
-            url,
-            cover,
-            lrc,
-            theme: '#ebd0c2'
-        },
-    ]
-});*/
 import { useEffect, useRef, useState } from 'react'
 
 import { convertFileSrc } from '@tauri-apps/api/tauri'
@@ -25,6 +7,12 @@ import * as dayjs from "dayjs"
 import d from "dayjs/plugin/duration"
 import { Chance } from 'chance'
 import { useHotkeys } from 'react-hotkeys-hook'
+import {
+    IconPlayerPause,
+    IconPlayerPlay,
+    IconPlayerSkipBack,
+    IconPlayerSkipForward
+} from '@tabler/icons-react'
 //import { unregister,register } from '@tauri-apps/api/globalShortcut'
 import { replacer } from './utils/storageHelper'
 dayjs.extend(d)
@@ -38,20 +26,20 @@ const toFormattedDuration = (p) => {
     }).format("mm:ss")
     return result
 }
-const DEFAULT_TITLE="Echo of Undefined"
+const DEFAULT_TITLE = "The Echo of Undefined"
 //unregister("space")
 
-export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,setPlay,fullscreen }) {
-    const next=()=>{
+export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play, setPlay, fullscreen }) {
+    const next = () => {
         console.log("mode: ", mode)
-        if(!play)setPlay(true)
+        if (!play) setPlay(true)
         switch (mode) {
             case "loop":
                 //setLoop(true);
                 //player.current.removeEventListener("ended")
                 player.current.load()
                 setNowPlay(nowPlay)
-                
+
                 player.current.play()
                 break;
             case "single":
@@ -81,7 +69,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
         }
     }
     let player = useRef(null);
-    const modes = ["loop","random", "list", "single"]
+    const modes = ["loop", "random", "list", "single"]
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
@@ -107,11 +95,11 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
         if (play) {
             player.current.play()
         }
-    },[nowPlay])
+    }, [nowPlay])
     useHotkeys("space", () => {
-        player.current.paused?player.current.play():player.current.pause()
+        player.current.paused ? player.current.play() : player.current.pause()
     })
-    useHotkeys("ctrl+n",next)
+    useHotkeys("ctrl+n", next)
     // register("space", () => {
     //     player.current.paused ? player.current.play() : player.current.pause()
     // })
@@ -134,29 +122,29 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                 localStorage.setItem("play", JSON.stringify(nowPlay, replacer))
                 appWindow.setTitle("" + nowPlay.title + " - " + nowPlay.artist)
             }}></audio>
-        <span onClick={()=>fn(!fullscreen)}>{nowPlay.title??DEFAULT_TITLE}</span>
+        <span onClick={() => fn(!fullscreen)}>{nowPlay.title ?? DEFAULT_TITLE}</span>
         <button onClick={() => {
             player.current.play();
         }}>Play</button>
         <button onClick={() => {
             player.current.pause();
         }}>Pause</button>
-        <button onClick={() => {
-            setNowPlay(list[(nowPlay.get("index") - 1) % list.length])
-            if(!play)setPlay(true)
-            //player.current.play()
-        }}>
-            Previous
-        </button>
-        <button onClick={() => {
-            //setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
-            if (!play) setPlay(true)
-            next()
-            
-            //player.current.play()
-        }}>
-            Next
-        </button>
+        
+            <IconPlayerSkipBack onClick={() => {
+                setNowPlay(list[(nowPlay.get("index") - 1) % list.length])
+                if (!play) setPlay(true)
+                //player.current.play()
+            }} />
+        
+        
+            <IconPlayerSkipForward onClick={() => {
+                //setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
+                if (!play) setPlay(true)
+                next()
+
+                //player.current.play()
+            }} />
+        
         &nbsp;
         <span>{currentTime}</span>/
         <span>{duration}</span>

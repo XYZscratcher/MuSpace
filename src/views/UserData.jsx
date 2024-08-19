@@ -1,12 +1,18 @@
+import {useEffect, useState} from 'react'
 export default function({lengthOfSongs}){//TODO:
-    const DATA={
-        name:'XYZscratcher',
-        description:'A music listener'
-    }
+    const [userData, setUserData] = useState(/*localStorage.userData??*/{
+        name: 'XYZscratcher',
+        description: 'A music listener'
+    })
+    useEffect(()=>{
+        localStorage.userData = JSON.stringify(userData)
+    },[userData])
     return (
         <div>
-            <h1>{DATA.name}</h1>
-            <p>{DATA.description}</p>
+            <h1 contentEditable onInput={(e)=>{
+                setUserData({...userData,name:e.target.textContent})
+            }}>{userData.name}</h1>
+            <p contentEditable>{userData.description}</p>
             <p>You have {lengthOfSongs} songs.</p>
         </div>
     )
