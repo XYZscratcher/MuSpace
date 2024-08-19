@@ -128,8 +128,10 @@ fn get_metadata(path: &str) -> HashMap<String, String> {
     let mut tp =std::path::PathBuf::new();
     if a.is_some() {
         tp=data_dir().unwrap().join(a.unwrap().replace('?', "").to_string()+"."+pic_type);
-        let mut p=fs::File::create(&tp).unwrap_or_else(|_|panic!("{:?}",tp));
-        p.write_all(pic.data()).unwrap();
+        if !Path::exists(&tp){
+            let mut p=fs::File::create(&tp).unwrap_or_else(|_|panic!("{:?}",tp));
+            p.write_all(pic.data()).unwrap();
+        }
     }
     let t=format!("{:?}",tp).replace('"', "").replace(r"\'","'").replace(r#"\\"#,r#"\"#);
     //dbg!(&t);

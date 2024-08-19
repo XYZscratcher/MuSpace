@@ -1,0 +1,1 @@
+export const isDev=location.host==="localhost:1420"

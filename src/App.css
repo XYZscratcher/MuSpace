@@ -16,7 +16,7 @@ body,
 .container {
   height: 100vh;
   display: grid;
-  grid-template:"nav head" 50px "nav  main" 1fr "foot  foot" 60px / 80px 1fr;
+  grid-template:"nav head" 50px "nav  main" 1fr "foot  foot" 5rem / 80px 1fr;
   overflow: hidden;
 } 
 
@@ -128,7 +128,7 @@ tr:hover {}
 }
 
 #lrcs {
-  height: calc(100% - 60px);
+  height: calc(100% - 5rem);
   scrollbar-width: none;
 
 }

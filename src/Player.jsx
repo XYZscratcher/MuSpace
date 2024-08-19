@@ -75,6 +75,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
     const [duration, setDuration] = useState(0);
     const [mode, setMode] = useState(modes[1])
     const [played, setPlayed] = useState([])
+    const [isPlaying, setIsPlaying] = useState(false);
     //const [loop,setLoop]=useState(mode==="loop");
 
     useEffect(() => {
@@ -122,41 +123,46 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                 localStorage.setItem("play", JSON.stringify(nowPlay, replacer))
                 appWindow.setTitle("" + nowPlay.title + " - " + nowPlay.artist)
             }}></audio>
-        <span onClick={() => fn(!fullscreen)}>{nowPlay.title ?? DEFAULT_TITLE}</span>
-        <button onClick={() => {
-            player.current.play();
-        }}>Play</button>
-        <button onClick={() => {
-            player.current.pause();
-        }}>Pause</button>
-        
-            <IconPlayerSkipBack onClick={() => {
+        <div className="player-main" style={{ display: "flex", justifyContent: "center",alignItems:"center" }}>
+            <div className="player-info">
+                <p onClick={() => fn(!fullscreen)}>{nowPlay.title ?? DEFAULT_TITLE}</p>
+            </div>
+
+            <div className='player-controls'>
+                <IconPlayerSkipBack onClick={() => {
                 setNowPlay(list[(nowPlay.get("index") - 1) % list.length])
                 if (!play) setPlay(true)
                 //player.current.play()
-            }} />
-        
-        
-            <IconPlayerSkipForward onClick={() => {
-                //setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
-                if (!play) setPlay(true)
-                next()
+                }} />
+                <span onClick={() => {
+                    if (isPlaying) player.current.pause();
+                    else player.current.play();
+                    setIsPlaying(!isPlaying)
+                }}>{isPlaying ? <IconPlayerPause /> : <IconPlayerPlay />}</span>
+                <IconPlayerSkipForward onClick={() => {
+                    //setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
+                    if (!play) setPlay(true)
+                    next()
 
-                //player.current.play()
-            }} />
-        
-        &nbsp;
-        <span>{currentTime}</span>/
-        <span>{duration}</span>
-        &nbsp;
-        volume:<input type="range" min="0" max="1" step="0.01" defaultValue={Number(localStorage.getItem("volume"))} onChange={(e) => {
-            player.current.volume = e.target.value;
-            localStorage.setItem('volume', e.target.value);
-        }} style={{ verticalAlign: "middle" }}></input>
-        <button onClick={(e) => {
-            let newMode = modes[(modes.indexOf(mode) + 1) % modes.length];
-            setMode(newMode)
-            console.log('new mode', newMode)
-        }}>{mode}</button>
-    </div>)//}
+                    //player.current.play()
+                }} />
+                <span style={{verticalAlign:"text-top"}}>
+                &nbsp;
+                <span>{currentTime}</span>/
+                <span>{duration}</span>
+                    &nbsp;</span>
+            </div>
+            <div className="player-volume">
+            volume:<input type="range" min="0" max="1" step="0.01" defaultValue={Number(localStorage.getItem("volume"))} onChange={(e) => {
+                player.current.volume = e.target.value;
+                localStorage.setItem('volume', e.target.value);
+            }} style={{ verticalAlign: "middle" }}></input>
+            <button onClick={(e) => {
+                let newMode = modes[(modes.indexOf(mode) + 1) % modes.length];
+                setMode(newMode)
+                console.log('new mode', newMode)
+            }}>{mode}</button>
+            </div>
+        </div>
+    </div>)
 }

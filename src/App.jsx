@@ -7,6 +7,7 @@ import { appWindow, LogicalSize, PhysicalSize } from '@tauri-apps/api/window';
 import { Route, Switch, Link } from "wouter";
 
 import { Lrc } from "react-lrc"
+import { useHotkeys } from 'react-hotkeys-hook'
 import ct from "colorthief/dist/color-thief.mjs";
 
 import Player from "./Player"
@@ -19,6 +20,7 @@ import UserData from "./views/UserData";
 
 //import getFP from "./core/canvasFP"
 import { asRGBString, lighten, distanceOfColors, darken } from "./utils/color"
+import { isDev } from "./utils/misc";
 //import { reviver } from "./utils/storageHelper";
 
 /*import a from "./assets/album.svg"
@@ -64,7 +66,9 @@ function App() {
     //fake "pure English" mode
   })
 
-
+  useHotkeys("F5", e => {
+    if(!isDev)e.preventDefault()
+  })
   useEffect(() => {
     if (path && nowPlay.file_name) {
       invoke("get_lyrics", { path: path + "/" + nowPlay.file_name }).then((lyrics) => {
