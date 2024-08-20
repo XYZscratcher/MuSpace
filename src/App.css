@@ -9,8 +9,8 @@ body,
 }
 
 :root {
-  --lrc-color: #111;
-  --lrc-active-color: #000;
+  --lrc-color: #eee;
+  --lrc-active-color: #fff;
 }
 
 .container {
@@ -148,6 +148,9 @@ tr:hover {}
   font-size: calc(1.5rem + 0.1vw);
   line-height: 1.2;
 }
+/* .player-main>*{
+  flex:1;
+} */
 /*TODO:transition
 @view-transition {
   navigation: auto;

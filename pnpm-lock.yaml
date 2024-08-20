@@ -17,6 +17,9 @@ dependencies:
   chance:
     specifier: ^1.1.12
     version: 1.1.12
+  chroma-js:
+    specifier: ^3.0.0
+    version: 3.0.0
   colorthief:
     specifier: ^2.4.0
     version: 2.4.0
@@ -938,6 +941,10 @@ packages:
 
   /chance@1.1.12:
     resolution: {integrity: sha512-vVBIGQVnwtUG+SYe0ge+3MvF78cvSpuCOEUJr7sVEk2vSBuMW6OXNJjSzdtzrlxNUEaoqH2GBd5Y/+18BEB01Q==}
+    dev: false
+
+  /chroma-js@3.0.0:
+    resolution: {integrity: sha512-ZFn4qxtZTvRJ7XatOLgaHGJYN10LoS6T0EMsu7IVayFG5+b6Yw8wCGQL5qLgo4B+wrRZ9niCrozOQ4a584bvaA==}
     dev: false
 
   /clrc@3.1.4:

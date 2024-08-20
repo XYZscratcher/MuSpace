@@ -9,6 +9,7 @@ import { Route, Switch, Link } from "wouter";
 import { Lrc } from "react-lrc"
 import { useHotkeys } from 'react-hotkeys-hook'
 import ct from "colorthief/dist/color-thief.mjs";
+import chroma from "chroma-js";
 
 import Player from "./Player"
 import Setting from "./views/Setting";
@@ -81,10 +82,11 @@ function App() {
       let c = new ct()
       coverImage.current.onload = () => {
 
-        let color = c.getColor(coverImage.current, 10)
+        let color = chroma(c.getColor(coverImage.current, 10))
         console.log("color: ", color)
-        const colorA = darken(color, 2), colorB = lighten(color, 0), colorC = lighten(color, 2);
-        setBackgroundColor(`linear-gradient(45deg, ${asRGBString(colorA)},20%,${asRGBString(colorB)},60%,${asRGBString(colorC)})`)
+        const colorA = color.shade(0.5), colorB = color.shade(0.4), colorC = color.shade(0.3);
+        //const colorA = darken(color, 2), colorB = lighten(color, 0), colorC = lighten(color, 2);
+        setBackgroundColor(`linear-gradient(45deg, ${colorA},20%,${colorB},60%,${colorC})`)
 
         // let [color1,color2]=c.getPalette(coverImage.current, 2, 10)
         // console.log("color1: ", color1)
@@ -96,23 +98,23 @@ function App() {
           "--lrc-color"
         )
         console.log("currentColor: ", currentColor)
-        const black = [0, 0, 0],
-          white = [255, 255, 255];
-        const lrc_black = "#000",
-          lrc_dark = "#111",
-          lrc_white = "#fff",
-          lrc_light = "#eee";
-        const now = currentColor === lrc_dark ? black : white;
-        const _else = currentColor !== lrc_dark ? black : white;
-        console.log("distance: ", distanceOfColors(color, now))
-        if (distanceOfColors(color, now) < distanceOfColors(color, _else)) {
-          document.documentElement.style.setProperty("--lrc-color", now[0] ?
-            lrc_dark : lrc_light
-          )
-          document.documentElement.style.setProperty("--lrc-active-color", now[0] ?
-            lrc_black : lrc_white
-          )
-        }
+        // const black = [0, 0, 0],
+        //   white = [255, 255, 255];
+        // const lrc_black = "#000",
+        //   lrc_dark = "#111",
+        //   lrc_white = "#fff",
+        //   lrc_light = "#eee";
+        // const now = currentColor === lrc_dark ? black : white;
+        // const _else = currentColor !== lrc_dark ? black : white;
+        // console.log("distance: ", distanceOfColors(color, now))
+        // if (distanceOfColors(color, now) < distanceOfColors(color, _else)) {
+        //   document.documentElement.style.setProperty("--lrc-color", now[0] ?
+        //     lrc_dark : lrc_light
+        //   )
+        //   document.documentElement.style.setProperty("--lrc-active-color", now[0] ?
+        //     lrc_black : lrc_white
+        //   )
+        // }
       }
     }
   }, [nowPlay])
