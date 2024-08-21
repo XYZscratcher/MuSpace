@@ -4,4 +4,7 @@
 
 ## 截图
 ![img](./assets/1.png)
+![img](./assets/2.png)
+## 已知 bug
+- 歌名过长时播放器的溢出问题
 

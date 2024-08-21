@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react'
 export default function({lengthOfSongs,lengthOfAlbums}){//TODO:
     const [userData, setUserData] = useState(/*localStorage.userData??*/{
-        name: 'XYZscratcher',
+        name: 'Your name',
         description: 'A music listener'
     })
     useEffect(()=>{

@@ -30,12 +30,15 @@ import c from "./assets/library_music.svg"
 import d from "./assets/settings.svg"*/
 import {
   IconUserSquareRounded,
-  IconUsers,
+  //IconUsers,
   IconMusic,
   IconVinyl,
-  IconSettings
+  IconSettings,
+  IconArrowLeft,
 } from "@tabler/icons-react";
 import "./App.css"
+
+
 
 const NOTHING = null;
 
@@ -163,7 +166,10 @@ function App() {
       <div className={fullscreen ? "fullscreen" : "hide"} style={{
         background: backgroundColor ?? "#cde"
       }}>
-        {/*<button onClick={() => { setFullscreen(false) }}>退出全屏</button>*/}
+        <IconArrowLeft onClick={() => { setFullscreen(false) }} 
+        color="#FFF" 
+        size={ICON_SIZE-12} 
+        style={{position: "absolute", top: "1rem", left: "1rem"}}></IconArrowLeft>
         <div style={{
           display: "flex",
           height: "100%",

@@ -56,6 +56,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
     const next = () => {
         console.log("mode: ", mode)
         if (!play) setPlay(true)
+        setIsPlaying(true)
         switch (mode) {
             case "loop":
                 //setLoop(true);
@@ -96,7 +97,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
 
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [mode, setMode] = useState(modes[0])
+    const [mode, setMode] = useState(modes[1])
     const [played, setPlayed] = useState([])
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(Number(localStorage.getItem("volume")));
@@ -131,7 +132,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
     //if(nowPlay){
     //console.log("nowPlay: ", nowPlay)
     return (<div style={{
-        padding: "1rem",
+        
 
     }}>
         <audio id="player"
@@ -147,9 +148,10 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                 localStorage.setItem("play", JSON.stringify(nowPlay, replacer))
                 appWindow.setTitle("" + nowPlay.title + " - " + nowPlay.artist)
             }}></audio>
-        <div className="player-main" style={{ display: "flex", justifyContent: "center",alignItems:"center" }}>
-            <div className="player-info">
-                <p onClick={() => fn(!fullscreen)}>{nowPlay.title ?? DEFAULT_TITLE}</p>
+        <div className="player-main" style={{ display: "flex", justifyContent: "center",alignItems:"center",marginInline:"1rem" }}>
+            <div className="player-info" style={{height:"80px"}}>
+                <h3 style={{fontWeight:"400",marginBlock:"0.8rem",lineHeight:1.15}} onClick={() => fn(!fullscreen)}>{nowPlay.title ?? DEFAULT_TITLE}</h3>
+                <p style={{marginBlock:0,fontSize:"0.9rem"}}>{nowPlay.artist}</p>
             </div>
 
             <div className='player-controls' style={{textAlign:"center"}}>
