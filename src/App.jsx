@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 
 import { convertFileSrc, invoke } from "@tauri-apps/api/tauri";
-import { open } from "@tauri-apps/api/dialog"
+
 import { appWindow, LogicalSize, PhysicalSize } from '@tauri-apps/api/window';
 
 import { Route, Switch, Link } from "wouter";
@@ -66,9 +66,12 @@ function App() {
     return <div className={"lrc " + (active ? "active" : "")}>{content/*.match(/[\w\s"'?!.(),:\-]+/)*/}</div>
     //fake "pure English" mode
   })
-
+  const albumList = [...new Set(
+    JSON.parse(localStorage.getItem('musicList') ?? '[]')
+      .map((item) => item.album)
+  )]
   useHotkeys("F5", e => {
-    if(!isDev)e.preventDefault()
+    if (!isDev) e.preventDefault()
   })
   useEffect(() => {
     if (path && nowPlay.file_name) {
@@ -124,7 +127,7 @@ function App() {
       <div className="column">
         <Link className="icon" href="/user_data"><IconUserSquareRounded size={ICON_SIZE + 12} color="#5a5a5a"></IconUserSquareRounded></Link>
         <Link className="icon albums" href="/albums"><IconVinyl size={ICON_SIZE} color="#5a5a5a"></IconVinyl></Link>
-        <Link className="icon artists" href="/artists"><IconUsers size={ICON_SIZE} color="#5a5a5a"></IconUsers></Link>
+        {/*<Link className="icon artists" href="/artists"><IconUsers size={ICON_SIZE} color="#5a5a5a"></IconUsers></Link>*/}
         <Link className="icon songs" href="/"><IconMusic size={ICON_SIZE} color="#5a5a5a"></IconMusic></Link>
         <Link className="icon settings" href="/settings"><IconSettings size={ICON_SIZE} color="#5a5a5a"></IconSettings></Link>
       </div>
@@ -140,8 +143,8 @@ function App() {
           </Route>
           <Route path="/settings"><Setting /></Route>
           <Route path="/artists"><Artists /></Route>
-          <Route path="/albums"><Albums /></Route>
-          <Route path="/user_data"><UserData lengthOfSongs={list?.length ?? 0} /></Route>
+          <Route path="/albums"><Albums list={albumList} /></Route>
+          <Route path="/user_data"><UserData lengthOfSongs={list?.length ?? 0} lengthOfAlbums={albumList.length} /></Route>
         </Switch>
       </div>
       <div className="footer">
@@ -179,7 +182,13 @@ function App() {
               width: "min(80%,18rem)",
               borderRadius: "1rem",
             }} crossOrigin="anonymous" ref={coverImage} />
-            <div style={{ flex: 1, color: "var(--lrc-active-color)", paddingBlockStart: "0.8rem", fontSize: "1.1rem" }}>
+            <div style={{
+              flex: 1,
+              color: "var(--lrc-active-color)",
+              paddingBlockStart: "0.8rem",
+              fontSize: "1.1rem",
+              marginInline: "1rem"
+            }}>
               <p>{nowPlay.title}</p>
               <p>{nowPlay.artist}</p>
             </div>
@@ -198,6 +207,7 @@ function App() {
         </div>
       </div>
     </div>
+
   );
 }
 

@@ -39,9 +39,10 @@ async function loadMusic(path) {
             lst.push(d)
             console.log(d.cover)
         }
+        localStorage.setItem("musicList", JSON.stringify(lst));
     }
     console.log(lst)
-    localStorage.setItem("musicList", JSON.stringify(lst));
+    
     console.log("tongji", tongji)
     return new Promise((resolve, reject) => {
         resolve([metadata, lst])

@@ -148,6 +148,12 @@ tr:hover {}
   font-size: calc(1.5rem + 0.1vw);
   line-height: 1.2;
 }
+.tabler-icon {
+  vertical-align: middle;
+}
+.player-main>* {
+  flex: 1;
+}
 /* .player-main>*{
   flex:1;
 } */

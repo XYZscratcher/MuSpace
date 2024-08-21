@@ -1,4 +1,5 @@
 import loadMusic from "../core/load";
+import { open } from "@tauri-apps/api/dialog"
 import { audioDir } from '@tauri-apps/api/path';
 const audioDirPath = await audioDir();
 import { useEffect } from "react";

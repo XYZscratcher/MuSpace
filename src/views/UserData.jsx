@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-export default function({lengthOfSongs}){//TODO:
+export default function({lengthOfSongs,lengthOfAlbums}){//TODO:
     const [userData, setUserData] = useState(/*localStorage.userData??*/{
         name: 'XYZscratcher',
         description: 'A music listener'
@@ -13,7 +13,7 @@ export default function({lengthOfSongs}){//TODO:
                 setUserData({...userData,name:e.target.textContent})
             }}>{userData.name}</h1>
             <p contentEditable>{userData.description}</p>
-            <p>You have {lengthOfSongs} songs.</p>
+            <p>{lengthOfSongs} songs, {lengthOfAlbums} albums.</p>
         </div>
     )
 }

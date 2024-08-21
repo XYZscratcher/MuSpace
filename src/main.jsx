@@ -1,9 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Route, Switch, Link } from "wouter";
 import App from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <Switch>
+      <Route path="/lyrics"><p></p></Route>
+      <Route><App /></Route>
+    </Switch>
   </React.StrictMode>,
 );
