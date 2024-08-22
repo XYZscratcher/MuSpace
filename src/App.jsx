@@ -81,6 +81,7 @@ function App() {
     if (path && nowPlay.file_name) {
       invoke("get_lyrics", { path: path + "/" + nowPlay.file_name }).then((lyrics) => {
         setLrc(lyrics)
+        console.log("lyrics: ", lyrics)
       })
     }
   }, [nowPlay])
@@ -176,7 +177,7 @@ function App() {
       {//</div>
       }
       <div className={fullscreen ? "fullscreen" : "hide"} style={{
-        background: backgroundColor ?? "#cde"
+        background: backgroundColor ?? "#123"
       }}>
         <IconArrowLeft onClick={() => { setFullscreen(false) }} 
         color="#FFF" 
