@@ -1,6 +1,8 @@
+//import { useState } from "react"
 import { open } from "@tauri-apps/api/dialog"
-export default function(){
-    const [path,setPath] = useState(localStorage.getItem('path'))
+
+export default function({path,setPath}){
+    //const [path,setPath] = useState(localStorage.getItem('path'))
     return (
         <div>
             <h1>设置</h1>

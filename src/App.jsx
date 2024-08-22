@@ -47,7 +47,7 @@ await appWindow.setSize(SIZE);
 await appWindow.setMinSize(SIZE);
 const defaultFileFormat = new Map([["file_name", ""], ["title", ""]])
 //console.log(getFP().hash)
-
+//localStorage.clear()
 const ICON_SIZE = 36
 
 //alert(a)
@@ -62,6 +62,7 @@ function App() {
   const [time, setTime] = useState(0);
   const [backgroundColor, setBackgroundColor] = useState(null)
   const [play, setPlay] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const coverImage = useRef(null);
 
@@ -142,9 +143,18 @@ function App() {
       <div className="content">
         <Switch>
           <Route path="/">
-            <Songs path={path} setPath={setPath} setMetadata={setMetadata} setList={setList} setNowPlay={setNowPlay} setPlay={setPlay} list={list} />
+            <Songs path={path}
+             setPath={setPath} 
+             setMetadata={setMetadata}
+              setList={setList} 
+              setNowPlay={setNowPlay} 
+              setPlay={setPlay} 
+              list={list}
+              setIsPlaying={setIsPlaying}
+              //isPlaying={isPlaying}
+               />
           </Route>
-          <Route path="/settings"><Setting /></Route>
+          <Route path="/settings"><Setting path={path} setPath={setPath}/></Route>
           <Route path="/artists"><Artists /></Route>
           <Route path="/albums"><Albums list={albumList} /></Route>
           <Route path="/user_data"><UserData lengthOfSongs={list?.length ?? 0} lengthOfAlbums={albumList.length} /></Route>
@@ -159,7 +169,9 @@ function App() {
           fn2={setTime}
           list={list}
           play={play}
-          setPlay={setPlay} />
+          setPlay={setPlay}
+          setIsPlaying={setIsPlaying}
+          isPlaying={isPlaying} />
       </div>
       {//</div>
       }

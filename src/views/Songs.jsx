@@ -3,7 +3,7 @@ import { open } from "@tauri-apps/api/dialog"
 import { audioDir } from '@tauri-apps/api/path';
 const audioDirPath = await audioDir();
 import { useEffect } from "react";
-export default function({path,setMetadata,setList,list,setNowPlay,setPlay,setPath}){    
+export default function ({ path, setMetadata, setList, list, setNowPlay, setPlay, setPath,  setIsPlaying }){    
     useEffect(() => {
         if (path) {
             loadMusic(path).then((m) => {
@@ -51,6 +51,7 @@ export default function({path,setMetadata,setList,list,setNowPlay,setPlay,setPat
                             <td style={{ width: new CSSUnitValue(50, "px"), textAlign: "center" }} className="num">{i + 1}</td>
                             <td onClick={() => {
                                 setNowPlay(item);
+                                setIsPlaying(true)
                                 setPlay(true);
                             }}>{item.get("title")}</td>
                             <td>{item.get("artist")}</td>

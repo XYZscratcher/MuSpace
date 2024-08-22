@@ -94,8 +94,7 @@ fn get_metadata(path: &str) -> HashMap<String, String> {
         tag.title()
             .as_deref()
             .unwrap_or(
-                path
-                    .file_name()
+                path.file_name()
                     .unwrap()
                     .to_str()
                     .unwrap()
@@ -117,27 +116,36 @@ fn get_metadata(path: &str) -> HashMap<String, String> {
     //r.insert("lyrics".into(),tag.get_string(&ItemKey::Lyrics).unwrap_or("None").into());
     //let mut f=File::open(path).unwrap();
     let pic = tag.pictures();
-    let pic = pic[0].clone();
-    let pic_type = match pic.mime_type() {
-        Some(MimeType::Jpeg) => "jpg",
-        Some(MimeType::Png) => "png",
-        Some(MimeType::Bmp) => "bmp",
-        Some(MimeType::Unknown(a)) => a,
-        _ => unimplemented!(),
-    };
-    let mut tp =std::path::PathBuf::new();
-    if a.is_some() {
-        tp=data_dir().unwrap().join(a.unwrap().replace('?', "").to_string()+"."+pic_type);
-        if !Path::exists(&tp){
-            let mut p=fs::File::create(&tp).unwrap_or_else(|_|panic!("{:?}",tp));
-            p.write_all(pic.data()).unwrap();
+    if pic.len() != 0 {
+        let pic = pic[0].clone();
+        let pic_type = match pic.mime_type() {
+            Some(MimeType::Jpeg) => "jpg",
+            Some(MimeType::Png) => "png",
+            Some(MimeType::Bmp) => "bmp",
+            Some(MimeType::Unknown(a)) => a,
+            _ => unimplemented!(),
+        };
+        let mut tp = std::path::PathBuf::new();
+        if a.is_some() {
+            tp = data_dir()
+                .unwrap()
+                .join(a.unwrap().replace('?', "").to_string() + "." + pic_type);
+            if !Path::exists(&tp) {
+                let mut p = fs::File::create(&tp).unwrap_or_else(|_| panic!("{:?}", tp));
+                p.write_all(pic.data()).unwrap();
+            }
         }
+        let t = format!("{:?}", tp)
+            .replace('"', "")
+            .replace(r"\'", "'")
+            .replace(r#"\\"#, r#"\"#);
+        //dbg!(&t);
+        r.insert("cover".into(), t);
+    }else{
+        r.insert("cover".into(), "".into());
     }
-    let t=format!("{:?}",tp).replace('"', "").replace(r"\'","'").replace(r#"\\"#,r#"\"#);
-    //dbg!(&t);
-    r.insert("cover".into(), t);
     //println!("{}", r.get("cover").unwrap());
-    
+
     //let base64=/*URL_SAFE*/BASE64_STANDARD.encode(pic.data());
     //r.insert("cover".into(),format!("data:{};base64,{}",mine_type,base64));//too long
     r
