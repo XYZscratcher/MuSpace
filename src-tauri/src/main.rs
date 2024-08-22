@@ -10,7 +10,7 @@ use lofty::probe::Probe;
 // use base64::{engine::general_purpose::URL_SAFE, Engine as _};
 // use chrono::prelude::*;
 use lofty::picture::MimeType;
-
+use serde_json::{Result, Value};
 use std::collections::HashMap;
 use std::fs::{self, File};
 use std::io::prelude::*;
@@ -141,7 +141,7 @@ fn get_metadata(path: &str) -> HashMap<String, String> {
             .replace(r#"\\"#, r#"\"#);
         //dbg!(&t);
         r.insert("cover".into(), t);
-    }else{
+    } else {
         r.insert("cover".into(), "".into());
     }
     //println!("{}", r.get("cover").unwrap());
@@ -150,9 +150,7 @@ fn get_metadata(path: &str) -> HashMap<String, String> {
     //r.insert("cover".into(),format!("data:{};base64,{}",mine_type,base64));//too long
     r
 }
-#[tauri::command]
-fn get_lyrics(path: &str) -> String {
-    let path = Path::new(&path);
+fn get_lyrics_by_tag(path: &Path) -> Option<String> {
     let tagged_file = Probe::open(path)
         .unwrap_or_else(|_| panic!("ERROR: Bad path provided: {:?}", path))
         .read()
@@ -165,7 +163,42 @@ fn get_lyrics(path: &str) -> String {
         // iterate through the tags to find a suitable one.
         None => tagged_file.first_tag().expect("ERROR: No tags found!"),
     };
-    tag.get_string(&ItemKey::Lyrics).unwrap_or("None").into()
+    tag.get_string(&ItemKey::Lyrics).map(|x| x.to_owned())
+}
+fn get_lyrics_by_lrc_file(path: &Path) -> std::result::Result<String,std::io::Error> {
+    let lrc_path = path
+                .to_str()
+                .unwrap()
+                .rsplit_once('.')
+                .unwrap()
+                .0
+                .to_owned()
+                + ".lrc";
+    fs::read_to_string(lrc_path)
+}
+
+fn get_lyrics_by_web(path:&Path)->String{
+    let m=get_metadata(path.to_str().unwrap());
+    let json=reqwest::blocking::get(
+        format!(
+            "https://lrclib.net/api/search?track_name={}&artist_name={}&album_name={}",
+            m.get("title").unwrap(),
+            m.get("artist").unwrap(),
+            m.get("album").unwrap()
+        )
+    ).unwrap().text().unwrap();
+    let v: Value = serde_json::from_str(json.as_str()).unwrap();
+    v[0]["syncedLyrics"].to_string().replace("\\n", "\n").replace('"', "")
+}
+#[tauri::command]
+fn get_lyrics(path: &str) -> String {
+    let path = Path::new(&path);
+    /*TODO:可自定义歌词获取顺序 */
+    get_lyrics_by_tag(path).unwrap_or_else(||{ 
+        get_lyrics_by_lrc_file(path).unwrap_or_else(|_|{
+            get_lyrics_by_web(path)
+        })
+    })
 }
 fn main() {
     tauri::Builder::default()
