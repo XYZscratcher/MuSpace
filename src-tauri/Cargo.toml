@@ -1,6 +1,6 @@
 [package]
 name = "muspace"
-version = "0.6.2"
+version = "0.7.0"
 description = "A Music Player"
 authors = ["you"]
 edition = "2021"

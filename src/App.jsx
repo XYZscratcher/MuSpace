@@ -45,6 +45,7 @@ const NOTHING = null;
 const SIZE = new LogicalSize(1100, 680);
 await appWindow.setSize(SIZE);
 await appWindow.setMinSize(SIZE);
+
 const defaultFileFormat = new Map([["file_name", ""], ["title", ""]])
 //console.log(getFP().hash)
 //localStorage.clear()
