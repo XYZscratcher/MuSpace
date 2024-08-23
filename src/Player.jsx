@@ -131,7 +131,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                 console.log("onLoadStart")
                 console.log("nowPlay: ", nowPlay)
                 localStorage.setItem("play", JSON.stringify(nowPlay, replacer))
-                appWindow.setTitle("" + nowPlay.title + " - " + nowPlay.artist)
+                if(nowPlay.title)appWindow.setTitle("" + nowPlay.title + (nowPlay.artist!=="-"?(" - " + nowPlay.artist):""))
             }}></audio>
         <div className="player-main" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginInline: "1rem" }}>
             <div className="player-info" style={{ height: "80px",width:"15rem" }}>
