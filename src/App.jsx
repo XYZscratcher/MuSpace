@@ -38,12 +38,14 @@ import {
 } from "@tabler/icons-react";
 import "./App.css"
 import t from "./utils/i18n"
+import icon from "../assets/app-icon.png"
 //const t=i.t;
 const NOTHING = null;
 
 const SIZE = new LogicalSize(1100, 680);
 await appWindow.setSize(SIZE);
 await appWindow.setMinSize(SIZE);
+await appWindow.center()
 
 const defaultFileFormat = new Map([["file_name", ""], ["title", ""]])
 //console.log(getFP().hash)
@@ -130,11 +132,20 @@ function App() {
   return (
     <div className="container">
       <div className="column">
-        <Link className="icon" href="/user_data"><IconUserSquareRounded size={ICON_SIZE + 12} color="#5a5a5a"></IconUserSquareRounded></Link>
-        <Link className="icon albums" href="/albums"><IconVinyl size={ICON_SIZE} color="#5a5a5a"></IconVinyl></Link>
+        <Link className="icon" href="/user_data">
+        {//<IconUserSquareRounded size={ICON_SIZE + 12} color="#5a5a5a" />
+        }<img src={icon} height={ICON_SIZE+14+"px"}></img>
+        </Link>
+        <Link className="icon albums" href="/albums">
+        <IconVinyl size={ICON_SIZE} color="#5a5a5a"/>
+        </Link>
         {/*<Link className="icon artists" href="/artists"><IconUsers size={ICON_SIZE} color="#5a5a5a"></IconUsers></Link>*/}
-        <Link className="icon songs" href="/"><IconMusic size={ICON_SIZE} color="#5a5a5a"></IconMusic></Link>
-        <Link className="icon settings" href="/settings"><IconSettings size={ICON_SIZE} color="#5a5a5a"></IconSettings></Link>
+        <Link className="icon songs" href="/">
+        <IconMusic size={ICON_SIZE} color="#5a5a5a"/>
+        </Link>
+        <Link className="icon settings" href="/settings">
+        <IconSettings size={ICON_SIZE} color="#5a5a5a"/>
+        </Link>
       </div>
       {//<div className="body">
       }

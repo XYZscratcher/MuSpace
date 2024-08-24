@@ -109,10 +109,6 @@ tr:hover {}
   flex: auto;
 }
 
-.icon>img {
-  height: 2.5rem;
-}
-
 .fullscreen {
   position: absolute;
   left:0px;
