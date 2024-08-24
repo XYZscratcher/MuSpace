@@ -20,10 +20,12 @@
     "dayjs": "^1.11.11",
     "dexie": "^4.0.7",
     "dexie-react-hooks": "^1.1.7",
+    "i18next": "^23.14.0",
     "plyr": "^3.7.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hotkeys-hook": "^4.5.0",
+    "react-i18next": "^15.0.1",
     "react-lrc": "^3.2.1",
     "wouter": "^3.3.0"
   },

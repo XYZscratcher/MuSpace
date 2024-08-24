@@ -37,9 +37,8 @@ import {
   IconArrowLeft,
 } from "@tabler/icons-react";
 import "./App.css"
-
-
-
+import t from "./utils/i18n"
+//const t=i.t;
 const NOTHING = null;
 
 const SIZE = new LogicalSize(1100, 680);
@@ -140,7 +139,7 @@ function App() {
       {//<div className="body">
       }
       <div className="header">
-        <input className="search" placeholder="Search for something..." />
+        <input className="search" placeholder={t("search_placeholder")} disabled/>
       </div>
       <div className="content">
         <Switch>
