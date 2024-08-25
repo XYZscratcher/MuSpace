@@ -15,7 +15,9 @@ export default function({lengthOfSongs,lengthOfAlbums}){//TODO:
             }}>{userData.name}</h1>
             <p contentEditable  onInput={(e)=>{
                 setUserData({...userData,description:e.target.textContent}) }}>{userData.description}</p>*/}
+            <h1>统计信息</h1>
             <p>{lengthOfSongs} songs, {lengthOfAlbums} albums.</p>
+            <p>累计听了 {parseInt(localStorage.getItem('minutes') ?? '0') } 分钟</p>
         </div>
     )
 }

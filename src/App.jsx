@@ -79,6 +79,15 @@ function App() {
   useHotkeys("F5", e => {
     if (!isDev) e.preventDefault()
   })
+  /*统计使用时间 */
+  useEffect(() => {
+    let minutes = parseInt(localStorage.getItem('minutes') ?? '0')
+    const id = setInterval(() => {
+      minutes++;
+      localStorage.setItem('minutes', minutes)
+    }, 1000 * 60)
+    return () => clearInterval(id)
+  })
   useEffect(() => {
     if (path && nowPlay.file_name) {
       invoke("get_lyrics", { path: path + "/" + nowPlay.file_name }).then((lyrics) => {
@@ -133,40 +142,40 @@ function App() {
     <div className="container">
       <div className="column">
         <Link className="icon" href="/user_data">
-        {//<IconUserSquareRounded size={ICON_SIZE + 12} color="#5a5a5a" />
-        }<img src={icon} height={ICON_SIZE+14+"px"}></img>
+          {//<IconUserSquareRounded size={ICON_SIZE + 12} color="#5a5a5a" />
+          }<img src={icon} height={ICON_SIZE + 14 + "px"}></img>
         </Link>
         <Link className="icon albums" href="/albums">
-        <IconVinyl size={ICON_SIZE} color="#5a5a5a"/>
+          <IconVinyl size={ICON_SIZE} color="#5a5a5a" />
         </Link>
         {/*<Link className="icon artists" href="/artists"><IconUsers size={ICON_SIZE} color="#5a5a5a"></IconUsers></Link>*/}
         <Link className="icon songs" href="/">
-        <IconMusic size={ICON_SIZE} color="#5a5a5a"/>
+          <IconMusic size={ICON_SIZE} color="#5a5a5a" />
         </Link>
         <Link className="icon settings" href="/settings">
-        <IconSettings size={ICON_SIZE} color="#5a5a5a"/>
+          <IconSettings size={ICON_SIZE} color="#5a5a5a" />
         </Link>
       </div>
       {//<div className="body">
       }
       <div className="header">
-        <input className="search" placeholder={t("search_placeholder")} disabled/>
+        <input className="search" placeholder={t("search_placeholder")} disabled />
       </div>
       <div className="content">
         <Switch>
           <Route path="/">
             <Songs path={path}
-             setPath={setPath} 
-             setMetadata={setMetadata}
-              setList={setList} 
-              setNowPlay={setNowPlay} 
-              setPlay={setPlay} 
+              setPath={setPath}
+              setMetadata={setMetadata}
+              setList={setList}
+              setNowPlay={setNowPlay}
+              setPlay={setPlay}
               list={list}
               setIsPlaying={setIsPlaying}
-              //isPlaying={isPlaying}
-               />
+            //isPlaying={isPlaying}
+            />
           </Route>
-          <Route path="/settings"><Setting path={path} setPath={setPath}/></Route>
+          <Route path="/settings"><Setting path={path} setPath={setPath} /></Route>
           <Route path="/artists"><Artists /></Route>
           <Route path="/albums"><Albums list={albumList} /></Route>
           <Route path="/user_data"><UserData lengthOfSongs={list?.length ?? 0} lengthOfAlbums={albumList.length} /></Route>
@@ -190,10 +199,10 @@ function App() {
       <div className={fullscreen ? "fullscreen" : "hide"} style={{
         background: backgroundColor ?? "#123"
       }}>
-        <IconArrowLeft onClick={() => { setFullscreen(false) }} 
-        color="#FFF" 
-        size={ICON_SIZE-12} 
-        style={{position: "absolute", top: "1rem", left: "1rem"}}></IconArrowLeft>
+        <IconArrowLeft onClick={() => { setFullscreen(false) }}
+          color="#FFF"
+          size={ICON_SIZE - 12}
+          style={{ position: "absolute", top: "1rem", left: "1rem" }}></IconArrowLeft>
         <div style={{
           display: "flex",
           height: "100%",

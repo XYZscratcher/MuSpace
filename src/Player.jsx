@@ -71,6 +71,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                 break;
             case "random":
                 try {
+                    //FIXME:在列表改变时有一定可能播放之前播过的歌曲
                     let num = chance.natural({ min: 0, max: list.length - 1, exclude: played });
                     let newList = [...played, num]
                     setNowPlay(list[num])
