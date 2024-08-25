@@ -11,28 +11,29 @@
   },
   "dependencies": {
     "@tabler/icons-react": "^3.12.0",
-    "@tauri-apps/api": "^1",
+    "@tauri-apps/api": "^1.6.0",
     "aplayer": "^1.10.1",
     "chance": "^1.1.12",
     "chroma-js": "^3.0.0",
     "colorthief": "^2.4.0",
     "crypto-js": "^4.2.0",
-    "dayjs": "^1.11.11",
-    "dexie": "^4.0.7",
+    "dayjs": "^1.11.13",
+    "dexie": "^4.0.8",
     "dexie-react-hooks": "^1.1.7",
     "i18next": "^23.14.0",
+    "layui": "^2.9.16",
     "plyr": "^3.7.8",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-hotkeys-hook": "^4.5.0",
     "react-i18next": "^15.0.1",
     "react-lrc": "^3.2.1",
-    "wouter": "^3.3.0"
+    "wouter": "^3.3.4"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.6.0",
-    "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.0.0"
+    "@tauri-apps/cli": "^1.6.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.2"
   }
 }
