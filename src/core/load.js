@@ -9,7 +9,13 @@ async function loadMusic(path) {
     let a;
     let cnt = 0;
     let lst = [];
+    try{
     a = await readDir(path);
+    }catch(e){
+        return Promise.reject("readDir Failed: " + path)
+    }
+    if(a.length===0)return Promise.reject("empty directory")
+    //console.log(a);
     let metadata = {};
     let i;
     let flag = await invoke("has_changed", { path });

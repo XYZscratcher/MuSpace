@@ -191,14 +191,17 @@ fn get_lyrics_by_web(path:&Path)->String{
     v[0]["syncedLyrics"].to_string().replace("\\n", "\n").replace('"', "")
 }
 #[tauri::command]
-fn get_lyrics(path: &str) -> String {
+fn get_lyrics(path: &str) -> std::result::Result<String,tauri::InvokeError> {
     let path = Path::new(&path);
+    if path.exists() {
     /*TODO:可自定义歌词获取顺序 */
-    get_lyrics_by_tag(path).unwrap_or_else(||{ 
+    Ok(get_lyrics_by_tag(path).unwrap_or_else(||{ 
         get_lyrics_by_lrc_file(path).unwrap_or_else(|_|{
             get_lyrics_by_web(path)
         })
-    })
+    }))}else{
+        Err("path does not exist".into())
+    }
 }
 fn main() {
     tauri::Builder::default()

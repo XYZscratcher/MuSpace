@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { convertFileSrc } from '@tauri-apps/api/tauri'
-import { appWindow, LogicalPosition, LogicalSize, PhysicalPosition, WebviewWindow } from '@tauri-apps/api/window'
+import { appWindow, availableMonitors, WebviewWindow,LogicalPosition, LogicalSize } from '@tauri-apps/api/window'
 
-import * as dayjs from "dayjs"
+import dayjs from "dayjs"
 import d from "dayjs/plugin/duration"
 import { Chance } from 'chance'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -21,18 +21,24 @@ import {
 } from '@tabler/icons-react'
 //import { unregister,register } from '@tauri-apps/api/globalShortcut'
 import { replacer } from './utils/storageHelper'
+// const m = (await availableMonitors())[0]
+// console.log(m)
+// //w.setSize(m.position().width-960,m.position().height-540)
 
-// const w=new WebviewWindow("lyrics",{
+// const w=new WebviewWindow("lrc",{
 //     url:'/lyrics',
-//     //transparent: true,
+//     transparent: true,
 
-//     x:960,
-//     y:540,
+//     width:960,
+//     height:540,
+//     x: m.size.width,
+//     y: m.size.height
 // })
-// w.setSize(new LogicalSize(500,500))
+// w.setMinSize(new LogicalSize(0, 0))
+//w.setPosition(new LogicalPosition(m.size.width-960,m.size.height-540))
 
-//w.setDecorations(false)
-//w.setAlwaysOnTop(true)
+//.setDecorations(true)
+// w.setAlwaysOnTop(true)
 
 
 //w.show()

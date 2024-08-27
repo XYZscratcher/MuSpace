@@ -10,6 +10,8 @@ import { Lrc } from "react-lrc"
 import { useHotkeys } from 'react-hotkeys-hook'
 import ct from "colorthief/dist/color-thief.mjs";
 import chroma from "chroma-js";
+//import "simpledotcss/simple.min.css"
+//import "layui/dist/css/layui.css"
 
 import Player from "./Player"
 import Setting from "./views/Setting";
@@ -37,12 +39,14 @@ import {
   IconArrowLeft,
 } from "@tabler/icons-react";
 import "./App.css"
+import "./reset.css"
 import t from "./utils/i18n"
 import icon from "../assets/app-icon.png"
 //const t=i.t;
 const NOTHING = null;
 
 const SIZE = new LogicalSize(1100, 680);
+console.log("appWindow.label: ", appWindow.label); // appWindow.label
 await appWindow.setSize(SIZE);
 await appWindow.setMinSize(SIZE);
 await appWindow.center()
@@ -93,7 +97,7 @@ function App() {
       invoke("get_lyrics", { path: path + "/" + nowPlay.file_name }).then((lyrics) => {
         setLrc(lyrics)
         console.log("lyrics: ", lyrics)
-      })
+      }).catch((err) => {alert("Error: "+err)});//TODO:Show error in another way
     }
   }, [nowPlay])
   useEffect(() => {

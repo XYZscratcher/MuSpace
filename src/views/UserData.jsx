@@ -8,6 +8,7 @@ export default function({lengthOfSongs,lengthOfAlbums}){//TODO:
     // useEffect(()=>{
     //     localStorage.userData = JSON.stringify(userData)
     // },[userData])
+    /*TODO:may be removed*/
     return (
         <div>
             {/*<h1 contentEditable onInput={(e)=>{

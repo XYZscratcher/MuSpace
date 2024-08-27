@@ -8,7 +8,7 @@ export default function ({ path, setMetadata, setList, list, setNowPlay, setPlay
         if (path) {
             loadMusic(path).then((m) => {
                 setMetadata(m[0]); setList(m[1]);
-            })
+            }).catch((err) => {console.error(err);})
         }
     },[path])
     return (<>{
