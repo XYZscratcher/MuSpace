@@ -200,7 +200,7 @@ fn get_lyrics(path: &str) -> std::result::Result<String,tauri::InvokeError> {
             get_lyrics_by_web(path)
         })
     }))}else{
-        Err("path does not exist".into())
+        Err("Path does not exist".into())
     }
 }
 fn main() {

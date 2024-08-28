@@ -18,7 +18,7 @@ export default function({path,setPath}){
                 }).then((v) => {
                     setPath(v); localStorage.setItem('path', v);
                 })
-            }}>修改</button>
+            }} className="btn ">修改</button>
             <h2>关于</h2>
             <p>{name} 版本号 v{version}</p>
             <p>由 XYZscratcher 用❤编写</p>

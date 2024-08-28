@@ -16,6 +16,7 @@ async function loadMusic(path) {
     }
     if(a.length===0)return Promise.reject("empty directory")
     //console.log(a);
+    //console.log("a: ", a)
     let metadata = {};
     let i;
     let flag = await invoke("has_changed", { path });
@@ -24,6 +25,8 @@ async function loadMusic(path) {
     }).map((v) => {
         return v.path
     })
+    if (a.length === 0) return Promise.reject("No songs in this directory")
+    
     if (!flag) {
         metadata = new Proxy(localStorage, {
             get(t, p) {

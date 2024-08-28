@@ -10,8 +10,10 @@ import { Lrc } from "react-lrc"
 import { useHotkeys } from 'react-hotkeys-hook'
 import ct from "colorthief/dist/color-thief.mjs";
 import chroma from "chroma-js";
+import {Toaster,toast} from "react-hot-toast"
 //import "simpledotcss/simple.min.css"
 //import "layui/dist/css/layui.css"
+//import "jian.css/main.css"
 
 import Player from "./Player"
 import Setting from "./views/Setting";
@@ -39,7 +41,7 @@ import {
   IconArrowLeft,
 } from "@tabler/icons-react";
 import "./App.css"
-import "./reset.css"
+//import "./reset.css"
 import t from "./utils/i18n"
 import icon from "../assets/app-icon.png"
 //const t=i.t;
@@ -97,7 +99,7 @@ function App() {
       invoke("get_lyrics", { path: path + "/" + nowPlay.file_name }).then((lyrics) => {
         setLrc(lyrics)
         console.log("lyrics: ", lyrics)
-      }).catch((err) => {alert("Error: "+err)});//TODO:Show error in another way
+      }).catch((err) => {toast.error("Error: "+err)});//TODO:Show error in another way
     }
   }, [nowPlay])
   useEffect(() => {
@@ -144,6 +146,7 @@ function App() {
 
   return (
     <div className="container">
+      <Toaster></Toaster>
       <div className="column">
         <Link className="icon" href="/user_data">
           {//<IconUserSquareRounded size={ICON_SIZE + 12} color="#5a5a5a" />

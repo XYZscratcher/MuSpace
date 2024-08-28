@@ -25,13 +25,13 @@ export default function ({ path, setMetadata, setList, list, setNowPlay, setPlay
                         setMetadata(m[0]); setList(m[1])
                     })
                 })
-            }}>选择</button>
+            }} className="btn pri">选择</button>
             <button onClick={()=>{
                     setPath(audioDirPath); localStorage.setItem('path', audioDirPath);
                     loadMusic(audioDirPath).then((m) => {
                         setMetadata(m[0]); setList(m[1])
                     })
-            }}>自动导入</button>
+            }} className="btn">自动导入</button>
         </div> : (list ?
             /*显示歌曲列表*/
             <table>

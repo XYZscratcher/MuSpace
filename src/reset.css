@@ -1,24 +1,336 @@
-/*From layui (https://github.com/layui/layui)*/
-button {
-    display: inline-block;
-    vertical-align: middle;
-    height: 38px;
-    line-height: 38px;
-    border: 1px solid transparent;
-    padding: 0 18px;
-    background-color: #16baaa;
-    color: #fff;
-    white-space: nowrap;
-    text-align: center;
-    font-size: 14px;
-    border-radius: 2px;
-    cursor: pointer;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
+@charset "UTF-8";
+
+/*! 
+* jian.css v1.2.7
+* https://github.com/jian-css/jian.css
+* Copyright 2022 The jian.css Authors
+*/
+/*有删改*/
+:root {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    /*color*/
+    /*--main:#0d6efd;*/
+    --pri: #16baaa;
+    --warn: rgb(255, 193, 7);
+    --success: rgb(25, 135, 84);
+    --info: rgb(13, 202, 240);
+    /*--gray:rgb(108,117,125);*/
+    --gray: #d8d8d8;
+
+    /*fonts*/
+    --mono: consolas,
+        "Lucida Console",
+        'Courier New',
+        Courier,
+        monospace;
+
+    
 }
 
-button{
-    font-size: 1rem;
-    border-radius: 0.4rem;
+@media (prefers-reduced-motion: no-preference) {
+    :root {
+        scroll-behavior: smooth;
+    }
 }
+
+
+
+body {
+    line-height: 1.618;
+}
+
+
+.c {
+    max-width: 60rem;
+    padding: 1.2rem;
+    margin: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        background-color: #111;
+        color: #ddd;
+        color-scheme: dark;
+        --gray: #2b2b2b;
+        --pri: #ffb300;
+    }
+
+    img,
+    video {
+        opacity: 0.8;
+    }
+}
+
+.btn {
+    color: black;
+    background-color: #fff;
+    padding-inline: 0.55rem;
+        padding-block: 0.35rem;
+    margin: 0.3rem;
+    font-size: 0.9rem;
+    display: inline-block;
+    cursor: pointer;
+    border: none;
+    line-height: inherit;
+    border: 2px solid var(--gray);
+}
+
+.btn:hover {
+    opacity: .8;
+}
+
+:is(.pri, .warn, .info, .success).btn {
+    border: 2px solid transparent;
+}
+
+/*color*/
+.pri,
+.warn,
+.info,
+.success {
+    color: white;
+}
+
+.pri {
+    background-color: var(--pri);
+}
+
+.warn {
+    background-color: var(--warn);
+}
+
+.info {
+    background-color: var(--info);
+}
+
+.success {
+    background-color: var(--success);
+}
+
+hr {
+    margin: 1rem 0;
+    color: inherit;
+    border: 0;
+    border-top: 1px solid;
+    opacity: .25;
+}
+
+
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.row>* {
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+}
+/*
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2.1rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+h4 {
+    font-size: 1.25rem;
+}
+
+@media screen and (min-width:576px) {
+    h1 {
+        font-size: 3rem;
+    }
+
+    h2 {
+        font-size: 2.6rem;
+        margin-top: 3rem;
+    }
+
+    h3 {
+        font-size: 2rem;
+        margin-top: 3rem;
+    }
+
+    h4 {
+        font-size: 1.44rem;
+    }
+
+    h5 {
+        font-size: 1.15rem;
+    }
+
+    h6 {
+        font-size: 0.96rem;
+    }
+
+    .col {
+        flex: 1 0 0%;
+    }
+
+    .col-1 {
+        flex: 0 0 auto;
+        width: 8.333%;
+    }
+
+    .col-2 {
+        flex: 0 0 auto;
+        width: 16.666%;
+    }
+
+    .col-3 {
+        flex: 0 0 auto;
+        width: 25%;
+    }
+
+    .col-4 {
+        flex: 0 0 auto;
+        width: 33.333%;
+    }
+
+    .col-5 {
+        flex: 0 0 auto;
+        width: 41.666%;
+    }
+
+    .col-6 {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+
+    .col-7 {
+        flex: 0 0 auto;
+        width: 58.333%;
+    }
+
+    .col-8 {
+        flex: 0 0 auto;
+        width: 66.666%;
+    }
+
+    .col-9 {
+        flex: 0 0 auto;
+        width: 75%;
+    }
+
+    .col-10 {
+        flex: 0 0 auto;
+        width: 83.333%;
+    }
+
+    .col-11 {
+        flex: 0 0 auto;
+        width: 91.666%;
+    }
+
+    
+}*/
+
+a:not(.btn) {
+    color: var(--pri);
+}
+
+
+a {
+    text-decoration: none;
+}
+
+a:empty::before {
+    content: attr(href);
+}
+
+input,
+.btn,
+.card,
+textarea,
+img,
+video,
+pre,
+code,
+dialog,
+mark {
+    border-radius: 5px;
+}
+
+mark {
+    background-color: var(--warn);
+    padding: 2px 5px;
+}
+
+:is(input, textarea):focus {
+    border: 1px solid var(--pri);
+    outline: 0;
+}
+
+/*input {
+    display: block;
+    padding: 0.5rem;
+    font-size: 1rem;
+    line-height: 1.618;
+    border: 1px solid #ced4da;
+    margin: 1rem 0;
+}*/
+
+.card {
+    border: 1px solid var(--gray);
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+}
+
+.card :is(h2, h3):first-child {
+    margin-top: 1rem;
+}
+
+footer {
+    border-top: 1px solid var(--gray);
+    font-size: 0.9rem;
+    text-align: center;
+    /*width: 80%;*/
+    margin: auto;
+    color: #585858;
+}
+
+pre,
+code {
+    font-family: var(--mono);
+    background-color: var(--gray);
+    padding: 1rem;
+    overflow: auto;
+}
+
+blockquote {
+    margin: 2rem 0 2rem 1.5rem;
+    padding: 0.4rem 0.8rem;
+    border-left: 0.35rem solid var(--pri);
+    font-style: italic;
+}
+
+
+dialog {
+    border: none;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+input,
+.btn,
+textarea {
+    transition: all .3s;
+}
+
+
+
+/*:not(input,textarea):focus {
+    outline: 3px solid blue;
+    border: 0;
+}*/
