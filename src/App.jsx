@@ -10,7 +10,7 @@ import { Lrc } from "react-lrc"
 import { useHotkeys } from 'react-hotkeys-hook'
 import ct from "colorthief/dist/color-thief.mjs";
 import chroma from "chroma-js";
-import {Toaster,toast} from "react-hot-toast"
+import { Toaster, toast } from "react-hot-toast"
 //import "simpledotcss/simple.min.css"
 //import "layui/dist/css/layui.css"
 //import "jian.css/main.css"
@@ -41,7 +41,7 @@ import {
   IconArrowLeft,
 } from "@tabler/icons-react";
 import "./App.css"
-//import "./reset.css"
+import "./reset.css"
 import t from "./utils/i18n"
 import icon from "../assets/app-icon.png"
 //const t=i.t;
@@ -99,7 +99,7 @@ function App() {
       invoke("get_lyrics", { path: path + "/" + nowPlay.file_name }).then((lyrics) => {
         setLrc(lyrics)
         console.log("lyrics: ", lyrics)
-      }).catch((err) => {toast.error("Error: "+err)});//TODO:Show error in another way
+      }).catch((err) => { toast.error("Error: " + err) });//TODO:Show error in another way
     }
   }, [nowPlay])
   useEffect(() => {
@@ -166,7 +166,10 @@ function App() {
       {//<div className="body">
       }
       <div className="header">
-        <input className="search" placeholder={t("search_placeholder")} disabled />
+        <input className="search"
+          placeholder={t("search_placeholder")}
+          disabled
+          style={{ cursor: "not-allowed" }} title="正在施工..." />
       </div>
       <div className="content">
         <Switch>
@@ -209,7 +212,7 @@ function App() {
         <IconArrowLeft onClick={() => { setFullscreen(false) }}
           color="#FFF"
           size={ICON_SIZE - 12}
-          style={{ position: "absolute", top: "1rem", left: "1rem" }}></IconArrowLeft>
+          style={{ position: "absolute", top: "1rem", left: "1rem", cursor: "grab" }}></IconArrowLeft>
         <div style={{
           display: "flex",
           height: "100%",

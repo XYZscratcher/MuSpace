@@ -82,7 +82,7 @@ td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor: grab;
+  cursor: pointer;
 }
 
 td:not(.num) {

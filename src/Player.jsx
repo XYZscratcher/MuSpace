@@ -140,7 +140,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                 localStorage.setItem("play", JSON.stringify(nowPlay, replacer))
                 if(nowPlay.title)appWindow.setTitle("" + nowPlay.title + (nowPlay.artist!=="-"?(" - " + nowPlay.artist):""))
             }}></audio>
-        <div className="player-main" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginInline: "1rem" }}>
+        <div className="player-main" style={{ display: "flex", justifyContent: "center", alignItems: "center", marginInline: "1rem", cursor: "pointer" }}>
             <div className="player-info" style={{ height: "80px",width:"15rem" }}>
                 <h3 style={{ fontWeight: "400", 
                     marginBlock: "0.8rem", 
@@ -148,7 +148,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                     overflow:"hidden",
                     whiteSpace:"nowrap",
                     textOverflow:"ellipsis" }} onClick={() => fn(!fullscreen)}>{nowPlay.title ?? DEFAULT_TITLE}</h3>
-                <p style={{ marginBlock: 0, fontSize: "0.9rem" }}>{nowPlay.artist}</p>
+                <p style={{ marginBlock: 0, fontSize: "0.9rem",cursor:"auto" }}>{nowPlay.artist}</p>
             </div>
 
             <div className='player-controls' style={{ textAlign: "center" }}>
@@ -176,11 +176,11 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                     &nbsp;</span>
             </div>
             <div className="player-volume" style={{ textAlign: "right" }}>
-                {volume == 0 ? <IconVolume3></IconVolume3> : <IconVolume></IconVolume>}<input type="range" min="0" max="1" step="0.01" defaultValue={volume} onChange={(e) => {
+                <span style={{cursor: "auto"}}>{volume == 0 ? <IconVolume3></IconVolume3> : <IconVolume></IconVolume>}</span><input type="range" min="0" max="1" step="0.01" defaultValue={volume} onChange={(e) => {
                     player.current.volume = e.target.value;
                     setVolume(e.target.value)
                     localStorage.setItem('volume', e.target.value);
-                }} style={{ verticalAlign: "middle" }}></input>
+                }} style={{ verticalAlign: "middle",accentColor:"var(--pri)" }}></input>
                 <span onClick={(e) => {
                     let newMode = modes[(modes.indexOf(mode) + 1) % modes.length];
                     setMode(newMode)
