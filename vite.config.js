@@ -1,9 +1,12 @@
 //import MillionLint from '@million/lint';
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { codeInspectorPlugin } from 'code-inspector-plugin';
 
 // https://vitejs.dev/config/
-const _plugins = [react()];
+const _plugins = [react(),codeInspectorPlugin({
+  bundler: 'vite',
+}),];
 //_plugins.unshift(MillionLint.vite())
 export default defineConfig(async () => ({
   plugins: _plugins,

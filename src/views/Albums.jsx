@@ -1,9 +1,13 @@
-export default function({list}){
-    return(
+import { Link } from "wouter";
+export default function ({ list }) {
+    return (
         <>
-        <h1>Albums</h1>
-        {/*<p>You have {albumList.length} albums.</p>*/}
-        <ul>{list.toSorted().map((v, i) => <li key={i}>{v}</li>)}</ul>
+            <h1>Albums</h1>
+            <ul>
+                {list.toSorted().map((v, i) => <li key={i}>
+                    <Link href={"/album/" + encodeURIComponent(v)}>{v}</Link>
+                </li>)}
+            </ul>
         </>
     )
 }

@@ -76,15 +76,24 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                 setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
                 break;
             case "random":
-                try {
+                //try {
                     //FIXME:在列表改变时有一定可能播放之前播过的歌曲
+                    if(played.length!==list.length){
                     let num = chance.natural({ min: 0, max: list.length - 1, exclude: played });
                     let newList = [...played, num]
                     setNowPlay(list[num])
-                    setPlayed(newList)
-                } catch (e) {
+                    setPlayed(newList)}
+                    else{
+                        let num=chance.natural({min:0,max:list.length-1})
+                        let newList=[];
+                        setNowPlay(list[num])
+                        setPlayed(newList)
+                        
+                    }
+                    console.log(newList)
+               // } catch (e) {
                     //setNowPlay
-                }
+                //}
 
                 player.current.load()//https://developer.chrome.com/blog/play-request-was-interrupted?hl=zh-cn
                 break;
@@ -180,7 +189,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
                     player.current.volume = e.target.value;
                     setVolume(e.target.value)
                     localStorage.setItem('volume', e.target.value);
-                }} style={{ verticalAlign: "middle",accentColor:"var(--pri)" }}></input>
+                }} style={{ verticalAlign: "middle"/*,accentColor:"var(--pri)"*/ }}></input>
                 <span onClick={(e) => {
                     let newMode = modes[(modes.indexOf(mode) + 1) % modes.length];
                     setMode(newMode)

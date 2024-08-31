@@ -21,6 +21,7 @@ import Songs from "./views/Songs";
 import Albums from "./views/Albums";
 import Artists from "./views/Artists";
 import UserData from "./views/UserData";
+import Album from "./views/Album";
 
 
 //import getFP from "./core/canvasFP"
@@ -145,7 +146,7 @@ function App() {
   }, [nowPlay])
 
   return (
-    <div className="container">
+    <div className="container" onContextMenu={(e)=>{if(!isDev)e.preventDefault()}}>
       <Toaster></Toaster>
       <div className="column">
         <Link className="icon" href="/user_data">
@@ -188,6 +189,9 @@ function App() {
           <Route path="/settings"><Setting path={path} setPath={setPath} /></Route>
           <Route path="/artists"><Artists /></Route>
           <Route path="/albums"><Albums list={albumList} /></Route>
+          <Route path="/album/:name">{
+            ({name})=><Album name={name}></Album>
+          }</Route>
           <Route path="/user_data"><UserData lengthOfSongs={list?.length ?? 0} lengthOfAlbums={albumList.length} /></Route>
         </Switch>
       </div>
@@ -229,7 +233,7 @@ function App() {
             <img src={nowPlay.cover ? convertFileSrc(nowPlay.cover) : ""} style={{
               display: "block",
               width: "min(80%,18rem)",
-              borderRadius: "1rem",
+              //borderRadius: "1rem",
             }} crossOrigin="anonymous" ref={coverImage} />
             <div style={{
               flex: 1,
