@@ -81,7 +81,7 @@ function App() {
   })
   const albumList = [...new Set(
     JSON.parse(localStorage.getItem('musicList') ?? '[]')
-      .map((item) => item.album)
+      .map((item) => {let {album,cover}=item;return JSON.stringify({album,cover})})
   )]
   useHotkeys("F5", e => {
     if (!isDev) e.preventDefault()
