@@ -20,6 +20,7 @@
     "dayjs": "^1.11.11",
     "dexie": "^4.0.8",
     "dexie-react-hooks": "^1.1.7",
+    "framer-motion": "^11.5.4",
     "i18next": "^23.14.0",
     "plyr": "^3.7.8",
     "react": "^18.3.1",

@@ -1,9 +1,18 @@
 import loadMusic from "../core/load";
 import { open } from "@tauri-apps/api/dialog"
 import { audioDir } from '@tauri-apps/api/path';
+import { Link } from "wouter";
 const audioDirPath = await audioDir();
 import { useEffect } from "react";
-export default function ({ path, setMetadata, setList, list, setNowPlay, setPlay, setPath,  setIsPlaying }){    
+
+export default function ({ setPath,
+    setMetadata,
+    setList,
+    setNowPlay,
+    setPlay,
+    list,
+    path,
+    setIsPlaying, }){    
     useEffect(() => {
         if (path) {
             loadMusic(path).then((m) => {
@@ -55,7 +64,7 @@ export default function ({ path, setMetadata, setList, list, setNowPlay, setPlay
                                 setPlay(true);
                             }}>{item.get("title")}</td>
                             <td>{item.get("artist")}</td>
-                            <td>{item.get("album")}</td>
+                            <td><Link href={`/album/${item.get('album')}`}>{item.get("album")}</Link></td>
                         </tr>
                     })
                     }

@@ -80,7 +80,7 @@ function App() {
     //fake "pure English" mode
   })
   const albumList = [...new Set(
-    JSON.parse(localStorage.getItem('musicList') ?? '[]')
+    JSON.parse(localStorage.getItem('musicList') || '[]')
       .map((item) => {let {album,cover}=item;return JSON.stringify({album,cover})})
   )]
   useHotkeys("F5", e => {
@@ -99,7 +99,7 @@ function App() {
     if (path && nowPlay.file_name) {
       invoke("get_lyrics", { path: path + "/" + nowPlay.file_name }).then((lyrics) => {
         setLrc(lyrics)
-        console.log("lyrics: ", lyrics)
+        //console.log("lyrics: ", lyrics)
       }).catch((err) => { toast.error("Error: " + err) });//TODO:Show error in another way
     }
   }, [nowPlay])
@@ -175,38 +175,39 @@ function App() {
       <div className="content">
         <Switch>
           <Route path="/">
-            <Songs path={path}
-              setPath={setPath}
-              setMetadata={setMetadata}
-              setList={setList}
-              setNowPlay={setNowPlay}
-              setPlay={setPlay}
-              list={list}
-              setIsPlaying={setIsPlaying}
-            //isPlaying={isPlaying}
+            <Songs 
+              {...{setPath,
+              setMetadata,
+              setList,
+              setNowPlay,
+              setPlay,
+              list,
+              path,
+              setIsPlaying,}}
             />
           </Route>
           <Route path="/settings"><Setting path={path} setPath={setPath} /></Route>
           <Route path="/artists"><Artists /></Route>
           <Route path="/albums"><Albums list={albumList} /></Route>
           <Route path="/album/:name">{
-            ({name})=><Album name={name}></Album>
+            ({name})=><Album name={name} {...{setNowPlay,setIsPlaying,setPlay,setList}}></Album>/*TODO:传一个函数，让专辑页面可以控制“正在播放” */
           }</Route>
           <Route path="/user_data"><UserData lengthOfSongs={list?.length ?? 0} lengthOfAlbums={albumList.length} /></Route>
         </Switch>
       </div>
       <div className="footer">
-        <Player nowPlay={nowPlay}
-          setNowPlay={setNowPlay}
-          fullscreen={fullscreen}
-          path={path ?? ""}
+        <Player 
           fn={setFullscreen}
           fn2={setTime}
-          list={list}
-          play={play}
-          setPlay={setPlay}
-          setIsPlaying={setIsPlaying}
-          isPlaying={isPlaying} />
+          path={path ?? ""}
+          {...{nowPlay,
+          setNowPlay,
+          fullscreen,          
+          list,
+          play,
+          setPlay,
+          setIsPlaying,
+          isPlaying,}} />
       </div>
       {//</div>
       }

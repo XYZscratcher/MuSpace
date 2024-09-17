@@ -46,13 +46,13 @@ async function loadMusic(path) {
                 }//历史原因，替代 Map
             })
             lst.push(d)
-            console.log(d.cover)
+            //console.log(d.cover)
         }
         localStorage.setItem("musicList", JSON.stringify(lst));
     }
-    console.log(lst)
+    //console.log(lst)
     
-    console.log("tongji", tongji)
+    //console.log("tongji", tongji)
     return new Promise((resolve, reject) => {
         resolve([metadata, lst])
     })

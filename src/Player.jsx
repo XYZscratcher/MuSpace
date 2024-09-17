@@ -73,7 +73,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
             case "single":
                 break;
             case "list":
-                setNowPlay(list[(nowPlay.get("index") + 1) % list.length])
+                setNowPlay(list[(nowPlay.index + 1) % list.length])
                 break;
             case "random":
                 //try {
@@ -162,7 +162,7 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
 
             <div className='player-controls' style={{ textAlign: "center" }}>
                 <IconPlayerSkipBack onClick={() => {
-                    setNowPlay(list[(nowPlay.get("index") - 1) % list.length])
+                    setNowPlay(list[(nowPlay.index - 1) % list.length])
                     if (!play) setPlay(true)
                     //player.current.play()
                 }} size={ICON_SIZE} />

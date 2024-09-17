@@ -234,7 +234,8 @@ h4 {
 }*/
 
 a:not(.btn) {
-    color: var(--pri);
+    /*color: var(--pri);*/
+    color:#234
 }
 
 

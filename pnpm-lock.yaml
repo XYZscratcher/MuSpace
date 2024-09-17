@@ -35,6 +35,9 @@ dependencies:
   dexie-react-hooks:
     specifier: ^1.1.7
     version: 1.1.7(@types/react@18.3.4)(dexie@4.0.8)(react@18.3.1)
+  framer-motion:
+    specifier: ^11.5.4
+    version: 11.5.4(react-dom@18.3.1)(react@18.3.1)
   i18next:
     specifier: ^23.14.0
     version: 23.14.0
@@ -1237,6 +1240,25 @@ packages:
       mime-types: 2.1.35
     dev: false
 
+  /framer-motion@11.5.4(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-E+tb3/G6SO69POkdJT+3EpdMuhmtCh9EWuK4I1DnIC23L7tFPrl8vxP+LSovwaw6uUr73rUbpb4FgK011wbRJQ==}
+    peerDependencies:
+      '@emotion/is-prop-valid': '*'
+      react: ^18.0.0
+      react-dom: ^18.0.0
+    peerDependenciesMeta:
+      '@emotion/is-prop-valid':
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      tslib: 2.7.0
+    dev: false
+
   /fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -1768,6 +1790,10 @@ packages:
     dependencies:
       psl: 1.9.0
       punycode: 2.3.1
+    dev: false
+
+  /tslib@2.7.0:
+    resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
     dev: false
 
   /tunnel-agent@0.6.0:

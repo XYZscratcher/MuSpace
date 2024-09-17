@@ -115,8 +115,9 @@ fn get_metadata(path: &str) -> HashMap<String, String> {
     r.insert("album".into(), a.unwrap_or("-").into());
     //r.insert("lyrics".into(),tag.get_string(&ItemKey::Lyrics).unwrap_or("None").into());
     //let mut f=File::open(path).unwrap();
+    r.insert("track".into(),tag.track().unwrap_or(0).to_string());
     let pic = tag.pictures();
-    if pic.len() != 0 {
+    if !pic.is_empty() {
         let pic = pic[0].clone();
         let pic_type = match pic.mime_type() {
             Some(MimeType::Jpeg) => "jpg",
