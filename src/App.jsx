@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef,cloneElement } from "react";
 
 import { convertFileSrc, invoke } from "@tauri-apps/api/tauri";
 
 import { appWindow, LogicalSize, PhysicalSize } from '@tauri-apps/api/window';
 
-import { Route, Switch, Link } from "wouter";
+import { Route, Switch, Link, useRoute } from "wouter";
 
 import { Lrc } from "react-lrc"
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -45,6 +45,7 @@ import "./App.css"
 import "./reset.css"
 import t from "./utils/i18n"
 import icon from "../assets/app-icon.png"
+import { useRouter } from "wouter";
 //const t=i.t;
 const NOTHING = null;
 
@@ -58,7 +59,33 @@ const defaultFileFormat = new Map([["file_name", ""], ["title", ""]])
 //console.log(getFP().hash)
 //localStorage.clear()
 const ICON_SIZE = 36
+//TODO:motion
+const useRoutes = (routes) => {
+  // save the length of the `routes` array that we receive on the first render
+  const [routesLen] = useState(() => routes.length);
 
+  // because we call `useRoute` inside a loop the number of routes can't be changed!
+  // otherwise, it breaks the rule of hooks and will cause React to break
+  if (routesLen !== routes.length) {
+    throw new Error(
+      "The length of `routes` array provided to `useRoutes` must be constant!"
+    );
+  }
+
+  const matches = routes.map((def) => {
+    return useRoute(def.path);
+  });
+
+  for (let [index, match] of matches.entries()) {
+    const [isMatch, params] = match;
+
+    if (isMatch) {
+      return cloneElement(routes[index].element, { params });
+    }
+  }
+
+  return null;
+};
 //alert(a)
 function App() {
   const [nowPlay, setNowPlay] = useState(JSON.parse(localStorage.getItem("play")) ?? defaultFileFormat);
@@ -145,6 +172,12 @@ function App() {
     }
   }, [nowPlay])
 
+  // let match,params;
+  // ["/","/setting","/albums","/songs","/artists","/user_data"].forEach((path) => {
+  //   const [isMatch, p] = useRoute(path);
+  //   if (isMatch)match=path;params=p;throw new Error("break")//TODO:
+  // });
+
   return (
     <div className="container" onContextMenu={(e)=>{if(!isDev)e.preventDefault()}}>
       <Toaster></Toaster>
@@ -190,7 +223,7 @@ function App() {
           <Route path="/artists"><Artists /></Route>
           <Route path="/albums"><Albums list={albumList} /></Route>
           <Route path="/album/:name">{
-            ({name})=><Album name={name} {...{setNowPlay,setIsPlaying,setPlay,setList}}></Album>/*TODO:传一个函数，让专辑页面可以控制“正在播放” */
+            ({name})=><Album name={name} {...{setNowPlay,setIsPlaying,setPlay,setList,list}}></Album>/*TODO:传一个函数，让专辑页面可以控制“正在播放” */
           }</Route>
           <Route path="/user_data"><UserData lengthOfSongs={list?.length ?? 0} lengthOfAlbums={albumList.length} /></Route>
         </Switch>

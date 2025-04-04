@@ -1,6 +1,7 @@
 import { IconArrowLeft } from "@tabler/icons-react";
+import { useEffect } from "react";
 import { Link } from "wouter";
-export default function ({ name, setNowPlay, setIsPlaying, setPlay,setList }){//TODO:App传入albumList
+export default function ({ name, setNowPlay, setIsPlaying, setPlay,setList,list }){//TODO:App传入albumList
     //console.log(name)
     let album = decodeURIComponent(name);
     //let [l,setl]=useLocation();
@@ -12,13 +13,20 @@ export default function ({ name, setNowPlay, setIsPlaying, setPlay,setList }){//
     }).map((v,i)=>{
         return {...v,index:i}
     });
+    songsList.name=album;
+    // useEffect(() => {
+    //     setList(songsList)
+    // })
     //setList(songsList);//TODO:
+    // console.log(songsList)
     return (<>
         <IconArrowLeft onClick={()=>history.back()}></IconArrowLeft>
-    <h1>{album}</h1>
+        <h1>{album}</h1>
     <ul style={{listStyle:"none",paddingLeft:"1rem"}}>{
         songsList.map((v) => (
-            <li onClick={()=>{setNowPlay(v)
+            <li onClick={()=>{
+                if (list.name != album) {setList(songsList);}
+                setNowPlay(v)
                 setIsPlaying(true)
                 setPlay(true);
             }}><span style={{marginRight:"1.5rem"}}>{v.track||'-'}</span>{v.title}</li>

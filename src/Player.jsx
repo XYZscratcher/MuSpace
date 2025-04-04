@@ -59,6 +59,7 @@ const ICON_SIZE = 36
 //unregister("space")
 
 export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play, setPlay, fullscreen, isPlaying, setIsPlaying }) {
+    //console.log(list)
     const next = () => {
         console.log("mode: ", mode)
         if (!play) setPlay(true)
@@ -78,14 +79,15 @@ export default function Player({ nowPlay, path, fn, fn2, list, setNowPlay, play,
             case "random":
                 //try {
                     //FIXME:在列表改变时有一定可能播放之前播过的歌曲
+                    let newList;
                     if(played.length!==list.length){
                     let num = chance.natural({ min: 0, max: list.length - 1, exclude: played });
-                    let newList = [...played, num]
+                    newList = [...played, num]
                     setNowPlay(list[num])
                     setPlayed(newList)}
                     else{
                         let num=chance.natural({min:0,max:list.length-1})
-                        let newList=[];
+                        newList=[];
                         setNowPlay(list[num])
                         setPlayed(newList)
                         

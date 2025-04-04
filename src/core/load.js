@@ -3,6 +3,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 
 import { isMusic } from "../utils/file";
 import { replacer } from "../utils/storageHelper";
+import { nameOfAllSongs } from "../utils/constants";
 
 async function loadMusic(path) {
     let tongji = {};
@@ -51,7 +52,7 @@ async function loadMusic(path) {
         localStorage.setItem("musicList", JSON.stringify(lst));
     }
     //console.log(lst)
-    
+    lst.name = nameOfAllSongs;
     //console.log("tongji", tongji)
     return new Promise((resolve, reject) => {
         resolve([metadata, lst])

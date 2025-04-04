@@ -2,6 +2,7 @@ import loadMusic from "../core/load";
 import { open } from "@tauri-apps/api/dialog"
 import { audioDir } from '@tauri-apps/api/path';
 import { Link } from "wouter";
+import { nameOfAllSongs } from "../utils/constants";
 const audioDirPath = await audioDir();
 import { useEffect } from "react";
 
@@ -13,13 +14,18 @@ export default function ({ setPath,
     list,
     path,
     setIsPlaying, }){    
-    useEffect(() => {
-        if (path) {
+    const load = () => {//TODO:about list
+        if (path && (!list||(list.name !== nameOfAllSongs))) {
             loadMusic(path).then((m) => {
                 setMetadata(m[0]); setList(m[1]);
-            }).catch((err) => {console.error(err);})
+            }).catch((err) => { console.error(err); })
         }
-    },[path])
+    }
+    useEffect(() => {
+        load()
+    },[])
+    //console.log(list)
+    //if(list.name!==nameOfAllSongs)load()
     return (<>{
         path === null ?
         <div>
@@ -41,7 +47,7 @@ export default function ({ setPath,
                         setMetadata(m[0]); setList(m[1])
                     })
             }} className="btn">自动导入</button>
-        </div> : (list ?
+        </div> : (list&&list.name === nameOfAllSongs ?
             /*显示歌曲列表*/
             <table>
                 <thead>
@@ -62,9 +68,9 @@ export default function ({ setPath,
                                 setNowPlay(item);
                                 setIsPlaying(true)
                                 setPlay(true);
-                            }}>{item.get("title")}</td>
-                            <td>{item.get("artist")}</td>
-                            <td><Link href={`/album/${item.get('album')}`}>{item.get("album")}</Link></td>
+                            }}>{item.title}</td>
+                            <td>{item.artist}</td>
+                            <td><Link href={`/album/${item.album}`}>{item.album}</Link></td>
                         </tr>
                     })
                     }
