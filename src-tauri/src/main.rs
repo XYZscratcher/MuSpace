@@ -117,14 +117,15 @@ fn get_metadata(path: &str) -> HashMap<String, String> {
     //let mut f=File::open(path).unwrap();
     r.insert("track".into(),tag.track().unwrap_or(0).to_string());
     let pic = tag.pictures();
-    if !pic.is_empty() {
+    if !pic.is_empty()&&pic[0].mime_type().is_some() {
         let pic = pic[0].clone();
         let pic_type = match pic.mime_type() {
             Some(MimeType::Jpeg) => "jpg",
             Some(MimeType::Png) => "png",
             Some(MimeType::Bmp) => "bmp",
             Some(MimeType::Unknown(a)) => a,
-            _ => unimplemented!(),
+            Some(a) => {dbg!(a);unimplemented!()},
+            _=>unimplemented!(),
         };
         let mut tp = std::path::PathBuf::new();
         if a.is_some() {
